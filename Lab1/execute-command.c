@@ -15,7 +15,7 @@ command_status (command_t c)
 }
 
 void
-execute_command (command_t c, bool time_travel)
+execute_command (command_t c, int time_travel)
 {
   /* FIXME: Replace this with your implementation.  You may need to
      add auxiliary functions and otherwise modify the source code.

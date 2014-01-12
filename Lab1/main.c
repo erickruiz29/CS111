@@ -25,16 +25,17 @@ get_next_byte (void *stream)
 int
 main (int argc, char **argv)
 {
+  int opt;
   int command_number = 1;
-  bool print_tree = false;
-  bool time_travel = false;
+  int print_tree = 0;
+  int time_travel = 0;
   program_name = argv[0];
 
   for (;;)
     switch (getopt (argc, argv, "pt"))
       {
-      case 'p': print_tree = true; break;
-      case 't': time_travel = true; break;
+      case 'p': print_tree = 1; break;
+      case 't': time_travel = 1; break;
       default: usage (); break;
       case -1: goto options_exhausted;
       }

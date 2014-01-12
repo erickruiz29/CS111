@@ -18,7 +18,7 @@ struct command
   // Exit status, or -1 if not known (e.g., because it has not exited yet).
   int status;
 
-  // I/O redirections, or null if none.
+  // I/O redirections, or 0 if none.
   char *input;
   char *output;
 

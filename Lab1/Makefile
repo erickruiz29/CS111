@@ -1,10 +1,9 @@
 # CS 111 Lab 1 Makefile
 
 CC = gcc
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Wno-unused -Werror
 LAB = 1
 DISTDIR = lab1-$(USER)
-CHECK_DIST = ./check-dist
 
 all: timetrash
 
@@ -34,13 +33,9 @@ dist: $(DISTDIR).tar.gz
 
 $(DISTDIR).tar.gz: $(DIST_SOURCES) check-dist
 	rm -fr $(DISTDIR)
-	tar -czf $@.tmp --mode=u+w --transform='s,^,$(DISTDIR)/,' \
-	  $(DIST_SOURCES)
-	$(CHECK_DIST) $(DISTDIR)
+	tar -czf $@.tmp --transform='s,^,$(DISTDIR)/,' $(DIST_SOURCES)
+	./check-dist $(DISTDIR)
 	mv $@.tmp $@
-
-Skeleton: $(DIST_SOURCES)
-	$(MAKE) CHECK_DIST=: USER=$@ lab1-$@.tar.gz
 
 check: $(TEST_BASES)
 
@@ -50,4 +45,4 @@ $(TEST_BASES): timetrash
 clean:
 	rm -fr *.o *~ *.bak *.tar.gz core *.core *.tmp timetrash $(DISTDIR)
 
-.PHONY: all dist check $(TEST_BASES) clean Skeleton
+.PHONY: all dist check $(TEST_BASES) clean
