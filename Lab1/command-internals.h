@@ -34,3 +34,14 @@ struct command
     struct command *subshell_command;
   } u;
 };
+
+struct cmd_node
+{
+  command cmd;
+  cmd_node next;
+};
+
+struct command_stream
+{
+  cmd_node commands;
+};

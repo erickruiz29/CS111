@@ -2,30 +2,65 @@
 
 #include "command.h"
 #include "command-internals.h"
+#include "alloc.h" 
 
 #include <error.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+//////////////////////////////////////////////////////////////////////
+//Global variables
+////////////////////////////////////////////////////////////////////////
 
-/* FIXME: You may need to add #include directives, macro definitions,
-   static function definitions, etc.  */
+linecount = 1;
 
-/* FIXME: Define the type 'struct command_stream' here.  This should
-   complete the incomplete type declaration in command.h.  */
+
+//////////////////////////////////////////////////////////////////////
+//struct cmd_node
+//{
+//  command cmd;
+//  cmd_node next;
+//};
+
+//struct command_stream
+//{
+//  cmd_node commands;
+//};
+//////////////////////////////////////////////////////////////////////
+
+//Check to make sure 
+bool isStatementValid(char* statement);
 
 command_stream_t
 make_command_stream (int (*get_next_byte) (void *),
 		     void *get_next_byte_argument)
 {
-  /* FIXME: Replace this with your implementation.  You may need to
-     add auxiliary functions and otherwise modify the source code.
-     You can also use external functions defined in the GNU C Library.  */
-  error (1, 0, "command reading not yet implemented");
-  return 0;
+  //create command stream
+  command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
+  
+  char ch = get_next_byte(get_next_byte_argument);
+  
+  while(ch != EOF)
+  {
+	  //Check errors
+    //....
+
+    //Get first word
+    char word_buf[1024] ="";
+    while(ch != ' ' && ch != '\t' && ch != '\n')
+    {
+      strcat(word_buf, ch);
+
+    }
+  }
+  
+  return stream;
 }
 
 command_t
 read_command_stream (command_stream_t s)
 {
-  /* FIXME: Replace this with your implementation too.  */
-  error (1, 0, "command reading not yet implemented");
+  
   return 0;
 }
