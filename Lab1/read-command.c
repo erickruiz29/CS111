@@ -17,17 +17,20 @@ int linecount;
 int (*get_byte) (void *);
 void *get_byte_argument;
 
-//////////////////////////////////////////////////////////////////////
-//struct cmd_node
-//{
-//  command cmd;
-//  cmd_node next;
-//};
+typedef struct cmd_node *cmd_node_t;
 
-//struct command_stream
-//{
-//  cmd_node commands;
-//};
+struct command_node
+{
+  command_t theCommand;
+  command_node_t next;
+  command_node_t prev;
+};
+
+struct command_stream
+{
+  command_node_t* commands;
+};
+
 //////////////////////////////////////////////////////////////////////
 
 //Check to make sure statement line is valid
@@ -36,6 +39,7 @@ bool isStatementValid(char* statement);
 void
 syntax_error()
 {
+  //make sure to erase allocated memory before exiting
   error(1, 0, "Syntax Error: Line %d", linecount);
 }
 
@@ -48,7 +52,7 @@ remove_whitespace()
     while(strchr("\n\t ", ch))
     {
       if(ch == '\n')
-        line_count++;
+        linecount++;
       ch = get_byte(get_byte_argument);
     }
     ungetc(ch, get_byte_argument);
@@ -58,7 +62,7 @@ remove_whitespace()
 
 //Grab what type of command buffer is and return to create it
 enum command_type
-grabBuffer(char *word_buf)
+grabType(char *word_buf)
 {
   
   while(!feof(get_byte_argument))
@@ -92,6 +96,14 @@ grabBuffer(char *word_buf)
           remove_whitespace();
           return AND_COMMAND;
         }
+        else if(de==EOF)
+          syntax_error();
+        else
+          ungetc(de, get_byte_argument);
+        break;
+
+
+
 
       case '\n': line_count++;
       case ';':
@@ -108,31 +120,49 @@ command_stream_t
 make_command_stream (int (*get_next_byte) (void *),
 		     void *get_next_byte_argument)
 {
+  linecount = 1;
+  char word_buf[512] ="";
+  get_byte = get_next_byte;
+  get_byte_argument = get_next_byte_argument;
   //create command stream
   command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
-  
-  char ch = get_next_byte(get_next_byte_argument);
-  
-  while(ch != EOF)
+  command_node_t node = checked_malloc(sizeof(struct command_node));
+  command_node_t temp_node = node;
+
+  if(!feof(get_byte_argument))
   {
-	  //Check errors
-    //....
-
-    //Get first word
-    char word_buf[1024] ="";
-    while(ch != ' ' && ch != '\t' && ch != '\n')
+    remove_whitespace();
+    
+    //check if its empty
+    strcpy(buffer,(get_byte(get_byte_argument)));
+    if(buffer[0]==EOF)
     {
-      strcat(word_buf, ch);
+      free(new_stream);
+      free(node);
+      return NULL;
+    }
+    ungetc(buffer[0],get_byte_argument);
+    buffer[0]='\0';
+    enum command_type cmdType = grabType(buffer);
 
+    while(1)
+    {
+  	  //Initialize node with command
+     
     }
   }
-  
   return stream;
 }
 
 command_t
 read_command_stream (command_stream_t s)
 {
-  
+  if(s==NULL)
+    return NULL;
+  if(*(s->commands) != NULL)
+  {
+
+    
+  }
   return 0;
 }
