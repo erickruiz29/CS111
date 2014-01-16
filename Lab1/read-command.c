@@ -109,8 +109,9 @@ char* validationAndFormat(char *commandString) {
 
     char currChar = '\0';
     char prevChar = '\0';
-    //char* commandString; //return string
-    //printf("%s \n", commandString);
+    memset(commandString,0,strlen(commandString));
+    //commandString = ""; //return string
+    //printf("%s new \n", commandString);
     bool operator = false; // Tests is last two characters are '&&' or '||'
     bool openParen = false; // Tests if there is currently an open set of parentheses
     int parenCount = 0; // number of currently open parentheses
@@ -158,6 +159,7 @@ char* validationAndFormat(char *commandString) {
 
             if (currChar == '\0') {
               //puts(commandString);
+              //printf("%s 1 \n", commandString);
                return commandString;
               //return ;
             }
@@ -184,7 +186,7 @@ char* validationAndFormat(char *commandString) {
             if ((isalnum(commandString[strlen(commandString)-1]) || is_valid(commandString[strlen(commandString)-1])) &&
                 (isalnum(currChar) || is_valid(currChar)) ) {
                 size_t cur_len = strlen(commandString);
-                if (cur_len < 510) {
+                if (cur_len < 1022) {
                     commandString[cur_len] = ' ';
                     continue;
                 }
@@ -260,13 +262,13 @@ char* validationAndFormat(char *commandString) {
 
                 if ((isalnum(currChar) || is_valid(currChar)) && openParen)  {
                     size_t cur_len = strlen(commandString);
-                    if (cur_len < 510) {
+                    if (cur_len < 1022) {
                         commandString[cur_len] = ';';
                     }
                 }
                 else if (is_special(currChar) && openParen) {
                     size_t cur_len = strlen(commandString);
-                    if (cur_len < 510) {
+                    if (cur_len < 1022) {
                         commandString[cur_len] = currChar;
                         continue;
                     }
@@ -281,7 +283,8 @@ char* validationAndFormat(char *commandString) {
             if ((isalnum(commandString[strlen(commandString)-1]) || is_valid(commandString[strlen(commandString)-1])) && !openParen)
             {
                 //puts(commandString);
-                //return commandString;
+                //printf("%s 2 \n", commandString);
+                return commandString;
             }
         } 
 
@@ -293,7 +296,7 @@ char* validationAndFormat(char *commandString) {
 
         if (isalnum(currChar) || is_valid(currChar) || is_special(currChar)) {
             size_t cur_len = strlen(commandString);
-            if (cur_len < 510) {
+            if (cur_len < 1022) {
               //putchar(currChar);
                 commandString[cur_len] = currChar;
                 //printf("%s \n", commandString);
@@ -328,7 +331,7 @@ char* validationAndFormat(char *commandString) {
 
    //puts("Test10");
 
-    //puts(commandString);
+    //printf("%s 3 \n", commandString);
     return commandString;
 
 
@@ -726,6 +729,7 @@ make_command_stream (int (*get_next_byte) (void *),
     type = grabType(commandString);
 
   }
+
 
     new_stream->commands = &head;
     return new_stream;
