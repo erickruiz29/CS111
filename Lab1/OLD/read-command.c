@@ -16,7 +16,6 @@
 
 int linecount;
 size_t curLetter;
-size_t startPos;
 int (*get_byte) (void *);
 void *get_byte_argument;
 
@@ -35,7 +34,7 @@ struct command_stream
 };
 
 command_t
-create_command(char * commandString, enum command_type type);
+create_command(char *commandString, char *word_buf, enum command_type type);
 
 //////////////////////////////////////////////////////////////////////
 
@@ -105,7 +104,7 @@ bool is_special(char a)
 
 //Check to make sure statement line is valid
 //Then formats/prepares strings to be turned into commands
-char* validationAndFormat(char *commandString) {
+void validationAndFormat(char *commandString) {
 
     char currChar = '\0';
     char prevChar = '\0';
@@ -158,8 +157,8 @@ char* validationAndFormat(char *commandString) {
 
             if (currChar == '\0') {
               //puts(commandString);
-               return commandString;
-              //return ;
+               //return commandString;
+              return ;
             }
 
             prevChar = '\n';
@@ -315,6 +314,7 @@ char* validationAndFormat(char *commandString) {
 
          //currChar = get_byte(get_byte_argument);
 
+
         //putchar(currChar);
         //puts("Test8"); 
     }
@@ -329,7 +329,7 @@ char* validationAndFormat(char *commandString) {
    //puts("Test10");
 
     //puts(commandString);
-    return commandString;
+    //return commandString;
 
 
 }
@@ -355,11 +355,11 @@ remove_whitespace()
 
 //Grab what type of command buffer is and return to create it
 enum command_type
-grabType(char *commandString)
+grabType(char *commandString, char *word_buf)
 {
-  startPos = curLetter;
-  char de;
+  char de; 
   char ch = commandString[curLetter];
+  curLetter++;
 
   while(1)
   {
@@ -371,10 +371,11 @@ grabType(char *commandString)
         de = commandString[curLetter];
         curLetter++;
         if(de == '&')
-        {
-          //curLetter++;
+        { 
           return AND_COMMAND;
         }
+        else
+          curLetter--;
         break;
 
       case '(':
@@ -389,16 +390,15 @@ grabType(char *commandString)
       }
       case '|':
         de = commandString[curLetter];
-        
-        
+        curLetter++;
         if(de == '|')
         {
-          curLetter++;
           return OR_COMMAND;
         }
 
         else if(isalnum(de) || strchr("!%+,-./:@^_\t\n ", de))
         {
+          curLetter--;
           return PIPE_COMMAND;
         }
 
@@ -407,9 +407,10 @@ grabType(char *commandString)
       case '\0':
         return SIMPLE_COMMAND;        
     }
+
+    strcat(word_buf, &ch);
     curLetter++;
     ch = commandString[curLetter];
-    curLetter++;
   }
   return SEQUENCE_COMMAND;
 }
@@ -421,16 +422,14 @@ create_simple_command(char *commandString)
   command->type = SIMPLE_COMMAND; command->status = -1;
   command->input = NULL; command->output = NULL;
   command->u.word = checked_malloc(8*sizeof(char*)); size_t wordSize = 8;
-  size_t inputSize = 8; size_t outputSize = 8;      
+  size_t inputSize = 8; size_t outputSize = 8; size_t i; 
   size_t curWordSize; size_t index = 0; bool inWord = false;
   bool inInput = false; bool inOutput = false;
   bool input = false; bool output = false;
-  size_t i; size_t len = strlen(commandString);
-  //for(; commandString[curLetter]; curLetter++)
-  for(i=startPos; i<curLetter; i++)
+  size_t len= strlen(commandString);
+
+  for(i=0; i<len; i++)
   {
-    printf("%s\n", commandString+i);
-    //printf("%s\n", commandString+curLetter);
     if(commandString[i] == '<')
     {
       command->input = checked_malloc(8*sizeof(char));
@@ -495,33 +494,32 @@ create_simple_command(char *commandString)
       else if(output && inOutput)
         inOutput = false; 
     }
-    else if(i+1 == len)
+    else if(commandString[i] == EOF)
     {
       if(index >= wordSize)
         checked_grow_alloc(command->u.word, &wordSize);
       return command;
     }
-    else if(is_special(commandString[i]))
-    {
-      if(index >= wordSize)
-        checked_grow_alloc(command->u.word, &wordSize);
-      return command;
-    }
-
+    //else if(is_special(commandString[i]))
+    //{
+    //  if(index >= wordSize)
+    //    checked_grow_alloc(command->u.word, &wordSize);
+    //  return command;
+    //}
   }
-  memset((void *) commandString, '\0', 1024);
+  memset((void *) commandString, '\0', 512);
   if(index >= wordSize)
         checked_grow_alloc(command->u.word, &wordSize);
   return command;
 }
 
 command_t
-create_subshell_command(char *commandString)
+create_subshell_command(char *commandString, char *word_buf)
 {
   command_t subshell = checked_malloc(sizeof(struct command));
   subshell->type = SUBSHELL_COMMAND; subshell->status = -1;
-  enum command_type type = grabType(commandString);
-  command_t command = create_command(commandString, type);
+  enum command_type type = grabType(commandString, word_buf);
+  command_t command = create_command(commandString, word_buf, type);
 
   char ch = commandString[curLetter]; 
   curLetter++;
@@ -542,11 +540,11 @@ create_subshell_command(char *commandString)
     while(ch != ')')
     {
       curLetter--;
-      enum command_type type = grabType(commandString);
+      enum command_type type = grabType(commandString, word_buf);
 
       command_t new_sequence = checked_malloc(sizeof(struct command));
       new_sequence->type = SEQUENCE_COMMAND; new_sequence->status = -1;
-      new_sequence->u.command[0] = create_command(commandString, type);
+      new_sequence->u.command[0] = create_command(commandString, word_buf, type);
       new_sequence->u.command[1] = NULL;
       command_t bottom = top;
       
@@ -566,12 +564,13 @@ create_subshell_command(char *commandString)
 }
 
 command_t
-create_multi_command(char *commandString, enum command_type type, command_t caller)
+create_multi_command(char *commandString, char* word_buf, enum command_type type, command_t caller)
 {
   command_t multi_command = checked_malloc(sizeof(struct command));
   multi_command->type = type; multi_command->status = -1;
+
   if(caller == NULL)
-    multi_command->u.command[0] = create_simple_command(commandString);
+    multi_command->u.command[0] = create_simple_command(word_buf);
 
   else if(caller->type == SUBSHELL_COMMAND || 
     (type == PIPE_COMMAND) == (caller->type == PIPE_COMMAND) ||
@@ -583,25 +582,25 @@ create_multi_command(char *commandString, enum command_type type, command_t call
   else if(type == PIPE_COMMAND && caller->type != PIPE_COMMAND)
     multi_command->u.command[0] = caller->u.command[1];
   
-  enum command_type next_type = grabType(commandString);
-  
+  enum command_type next_type = grabType(commandString, word_buf);
+
   if(next_type == SIMPLE_COMMAND || next_type == SEQUENCE_COMMAND)
   {
-    multi_command->u.command[1] = create_simple_command(commandString);
+    multi_command->u.command[1] = create_simple_command(word_buf);
     return multi_command;
   }
 
   else if(type != PIPE_COMMAND && next_type == PIPE_COMMAND)
   {
-    multi_command->u.command[1] = create_simple_command(commandString);
-    multi_command->u.command[1] = create_multi_command(commandString, next_type, multi_command);
+    multi_command->u.command[1] = create_simple_command(word_buf);
+    multi_command->u.command[1] = create_multi_command(commandString, word_buf, next_type, multi_command);
     return multi_command;
   }
 
   else if(next_type == SUBSHELL_COMMAND)
   {
-    command_t subshell = create_subshell_command(commandString);
-    next_type = grabType(commandString);
+    command_t subshell = create_subshell_command(commandString, word_buf);
+    next_type = grabType(commandString, word_buf);
     
     if(next_type == SIMPLE_COMMAND)
     {
@@ -611,21 +610,21 @@ create_multi_command(char *commandString, enum command_type type, command_t call
     else if(type != PIPE_COMMAND && next_type == PIPE_COMMAND)
     {
       multi_command->u.command[1] = subshell;
-      multi_command->u.command[1] = create_multi_command(commandString, next_type, multi_command);
+      multi_command->u.command[1] = create_multi_command(commandString, word_buf, next_type, multi_command);
       return multi_command;
     }
     else
     {
       multi_command->u.command[1] = subshell;
-      command_t next_command = create_multi_command(commandString, next_type, multi_command);
+      command_t next_command = create_multi_command(commandString, word_buf, next_type, multi_command);
       return next_command;
     }
   }
 
   else
   {
-    multi_command->u.command[1] = create_simple_command(commandString);
-    command_t next_command = create_multi_command(commandString, next_type, multi_command);
+    multi_command->u.command[1] = create_simple_command(word_buf);
+    command_t next_command = create_multi_command(commandString, word_buf, next_type, multi_command);
     return next_command;
   }
 
@@ -633,29 +632,29 @@ create_multi_command(char *commandString, enum command_type type, command_t call
 
 
 command_t
-create_command(char * commandString, enum command_type type)
+create_command(char * commandString, char *word_buf, enum command_type type)
 {
   if(type == SIMPLE_COMMAND)
-    return create_simple_command(commandString);
+    return create_simple_command(word_buf);
   else if(type == SUBSHELL_COMMAND)
   {
-    command_t subshell = create_subshell_command(commandString);
-    type = grabType(commandString);
+    command_t subshell = create_subshell_command(commandString, word_buf);
+    type = grabType(commandString, word_buf);
     if(type == SIMPLE_COMMAND)
       return subshell;
     else
-      return create_multi_command(commandString, type, subshell);
+      return create_multi_command(commandString, word_buf, type, subshell);
   }
   else
-    return create_multi_command(commandString, type, NULL);
+    return create_multi_command(commandString, word_buf, type, NULL);
 }
 
 command_node_t
-create_node(char *word_buf, enum command_type type)
+create_node(char *commandString, char *word_buf, enum command_type type)
 {
   command_node_t node = checked_malloc(sizeof(struct command_node));
   node->next = NULL;
-  node->theCommand = create_command(word_buf,type);
+  node->theCommand = create_command(commandString, word_buf,type);
   return node;
 }
 
@@ -678,9 +677,9 @@ make_command_stream (int (*get_next_byte) (void *),
   get_byte = get_next_byte;
   get_byte_argument = get_next_byte_argument;
   char commandString[1024] = "\0";
-  //char word_buf[512] = "\0";
+  char word_buf[512] = "\0";
+  size_t pos = 0;
   size_t cLen = 0;
-  startPos = 0;
   command_node_t temp_node;
   command_node_t head = NULL;
   command_node_t tail = NULL;
@@ -698,11 +697,11 @@ make_command_stream (int (*get_next_byte) (void *),
 
   command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
   //grab command_type
-  enum command_type type = grabType(commandString);
+  enum command_type type = grabType(commandString, word_buf);
 
   while(1) 
   {
-    temp_node = create_node(commandString,type);
+    temp_node = create_node(commandString, word_buf, type);
     if(head == NULL)
     {
       head = temp_node;
