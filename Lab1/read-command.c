@@ -18,7 +18,6 @@ int linecount;
 int (*get_byte) (void *);
 void *get_byte_argument;
 
-typedef struct cmd_node *cmd_node_t;
 typedef struct command_node *command_node_t;
 
 struct command_node
@@ -101,13 +100,12 @@ bool is_special(char a)
 
 //Check to make sure statement line is valid
 //Then formats/prepares strings to be turned into commands
-void validationAndFormat() {
+void validationAndFormat(char *commandString) {
 
     char currChar = '\0';
     char prevChar = '\0';
     //char* commandString; //return string
-    char commandString[512] = "";
-    printf("%s \n", commandString);
+    //printf("%s \n", commandString);
     bool operator = false; // Tests is last two characters are '&&' or '||'
     bool openParen = false; // Tests if there is currently an open set of parentheses
     int parenCount = 0; // number of currently open parentheses
@@ -154,7 +152,7 @@ void validationAndFormat() {
                 currChar = get_byte(get_byte_argument);
 
             if (currChar == '\0') {
-              puts(commandString);
+              //puts(commandString);
                //return commandString;
               return ;
             }
@@ -277,8 +275,8 @@ void validationAndFormat() {
 
             if ((isalnum(commandString[strlen(commandString)-1]) || is_valid(commandString[strlen(commandString)-1])) && !openParen)
             {
-                puts(commandString);
-                return;
+                //puts(commandString);
+                //return commandString;
             }
         } 
 
@@ -326,7 +324,7 @@ void validationAndFormat() {
 
    //puts("Test10");
 
-    puts(commandString);
+    //puts(commandString);
     //return commandString;
 
 
@@ -352,59 +350,143 @@ remove_whitespace()
 
 
 //Grab what type of command buffer is and return to create it
-/*enum command_type
-grabType(char *word_buf)
+enum command_type
+grabType(char *commandString)
 {
-  
-  while(!feof(get_byte_argument))
+  size_t curLetter = 0;
+  char de; 
+  char ch = commandString[curLetter];
+  while(1)
   {
-
-    //make sure the comment is in the right place
-    char ch = get_byte(get_byte_argument);
-    char de = get_byte(get_byte_argument);
-    if(de == '#' && !strchr("\n\t ", ch))
-     syntax_error();
-    ungetc(de, get_byte_argument);
-
     //the special characters that make the unique cases
     switch(ch) 
     {
-      case '#':
-        de = get_byte(get_byte_argument);
-        //get to end of comment
-        while(de != '\n')
-        {
-            if(de == EOF)
-              return SIMPLE_COMMAND;
-            de = get_byte(get_byte_argument);
-        }
-        return grabBuffer(word_buf);
+      //case '&':
+      //  de = get_byte(get_byte_argument);
+      //  if(de == '&')
+      // { 
+      //    remove_whitespace();
+      //    return AND_COMMAND;
+     //   }
+     //   else
+      //    ungetc(de, get_byte_argument);
+      //  break;
 
-      case '&':
-        de = get_byte(get_byte_argument);
-        if(de == '&')
-        { 
-          remove_whitespace();
-          return AND_COMMAND;
-        }
-        else if(de==EOF)
-          syntax_error();
-        else
-          ungetc(de, get_byte_argument);
-        break;
-
-
-
-
-      case '\n': line_count++;
+      case '\n': linecount++;
       case ';':
-      case EOF:
+      case '\0':
         return SIMPLE_COMMAND;        
     }
-    strcat(word_buf, ch);
+    curLetter++;
+    ch = commandString[curLetter];
   }
   return SEQUENCE_COMMAND;
-}*/
+}
+
+command_t
+create_simple_command(char *commandString)
+{
+  command_t command = checked_malloc(sizeof(struct command));
+  command->type = SIMPLE_COMMAND; command->status = -1;
+  command->input = NULL; command->output = NULL;
+  command->u.word = checked_malloc(8*sizeof(char*)); size_t wordSize = 8;
+  size_t inputSize = 8; size_t outputSize = 8;      
+  size_t curWordSize; size_t index = 0; bool inWord = false;
+  bool inInput = false; bool inOutput = false;
+  bool input = false; bool output = false; size_t i;
+  for(i = 0; commandString[i]; i++)
+  {
+    if(commandString[i] == '<')
+    {
+      command->input = checked_malloc(8*sizeof(char));
+      inInput = true;
+    }
+    else if(commandString[i] == '>')
+    {
+      command->output = checked_malloc(8*sizeof(char)); 
+      inInput = false;
+      inOutput = true;
+    }
+    else if(isalnum(commandString[i]) || strchr("!%+,-./:@^_", commandString[i]))
+    {
+
+      if(inOutput)
+      {
+        output = true;
+        char* string = command->output;
+        if(strlen(string) >= outputSize)
+          checked_grow_alloc(string, &outputSize);
+        string[strlen(string)] = commandString[i];
+      }
+
+      else if(inInput)
+      {
+        input = true;
+        char* string = command->input;
+        if(strlen(string) >= inputSize)
+          checked_grow_alloc(string, &inputSize);
+        string[strlen(string)] = commandString[i];
+      }
+
+      else if(!inWord)
+      {
+        if(index >= wordSize)
+          checked_grow_alloc(command->u.word, &wordSize);
+        command->u.word[index] = checked_malloc(8*sizeof(char));
+        curWordSize = 8;
+        command->u.word[index][0] = commandString[i];
+        inWord = true;
+      }
+
+      else if(inWord)
+      {
+        char *string = command->u.word[index];
+        if(strlen(string) >= curWordSize)
+          checked_grow_alloc(string, &curWordSize);
+        string[strlen(string)] = commandString[i];
+      }
+
+    }
+    else if(strchr("\t ", commandString[i]))
+    {
+      if(inWord)
+      {
+        index++;
+        inWord = false; 
+      }
+      else if(input && inInput)
+        inInput = false;
+      else if(output && inOutput)
+        inOutput = false; 
+    }
+    else if(commandString[i] == EOF)
+    {
+      if(index >= wordSize)
+        checked_grow_alloc(command->u.word, &wordSize);
+      return command;
+    }
+  }
+  memset((void *) commandString, '\0', 1024);
+  if(index >= wordSize)
+        checked_grow_alloc(command->u.word, &wordSize);
+  return command;
+}
+
+command_t
+create_command(char * commandString, enum command_type type)
+{
+  //if(type == SIMPLE_COMMAND)
+    return create_simple_command(commandString);
+}
+
+command_node_t
+create_node(char *word_buf, enum command_type type)
+{
+  command_node_t node = checked_malloc(sizeof(struct command_node));
+  node->next = NULL;
+  node->theCommand = create_command(word_buf,type);
+  return node;
+}
 
 
 command_stream_t
@@ -419,41 +501,61 @@ make_command_stream (int (*get_next_byte) (void *),
   command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
   command_node_t node = checked_malloc(sizeof(struct command_node));
   command_node_t temp_node = node;
-
-  if(!feof(get_byte_argument))
-  {
-    remove_whitespace();
-    
-    //check if its empty
-    strcpy(buffer,(get_byte(get_byte_argument)));
-    if(buffer[0]==EOF)
-    {
-      free(new_stream);
-      free(node);
-      return NULL;
-    }
-    ungetc(buffer[0],get_byte_argument);
-    buffer[0]='\0';
-    enum command_type cmdType = grabType(buffer);
-
-    while(1)
-    {
-  	  //Initialize node with command
-     
-    }
-  }
-  return stream;*/
-
-
-
-  
+*/
+  linecount = 1;
   get_byte = get_next_byte;
   get_byte_argument = get_next_byte_argument;
-  while(!feof(get_next_byte_argument)) {
-    validationAndFormat();
+  char commandString[1024] = "\0";
+  //char word_buf[512] = "\0";
+  size_t pos = 0;
+  size_t cLen = 0;
+  command_node_t temp_node;
+  command_node_t head = NULL;
+  command_node_t tail = NULL;
+
+  //grab first command
+  if(!feof(get_next_byte_argument))
+  {
+    validationAndFormat(commandString);
+    cLen = strlen(commandString);
+
+    if(cLen == 0)
+      return NULL;
   }
 
-    command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
+  command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
+  //grab command_type
+  enum command_type type = grabType(commandString);
+
+  while(1) 
+  {
+    temp_node = create_node(commandString,type);
+    if(head == NULL)
+    {
+      head = temp_node;
+    } 
+    else
+    {
+      temp_node->prev = tail;
+      tail->next = temp_node;
+    }
+    tail = temp_node;
+
+    //grab next full command
+    //if(pos+1 == cLen)
+    //{
+    //  validationAndFormat(commandString);
+    //  cLen = strlen(commandString);
+    //  pos = 0;
+    //}
+
+    //grab next command_type
+    //type = grabType(commandString);
+    new_stream->commands = &head;
+    return new_stream;
+  }
+
+    new_stream->commands = &head;
     return new_stream;
 
 }
@@ -465,8 +567,14 @@ read_command_stream (command_stream_t s)
     return NULL;
   if(*(s->commands) != NULL)
   {
-
-    
+    command_node_t stream = *(s->commands);
+    *(s->commands) = stream->next;
+    if(stream->prev != NULL)
+    {
+      free(stream->prev->theCommand);
+      free(stream->prev);
+    }
+    return stream->theCommand;
   }
-  return 0;
+  return NULL;
 }
