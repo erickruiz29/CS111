@@ -104,7 +104,7 @@ bool is_special(char a)
 
 //Check to make sure statement line is valid
 //Then formats/prepares strings to be turned into commands
-void validationAndFormat(char *commandString) {
+char* validationAndFormat(char *commandString) {
 
     char currChar = '\0';
     char prevChar = '\0';
@@ -157,8 +157,8 @@ void validationAndFormat(char *commandString) {
 
             if (currChar == '\0') {
               //puts(commandString);
-               //return commandString;
-              return ;
+               return commandString;
+              //return ;
             }
 
             prevChar = '\n';
@@ -295,7 +295,7 @@ void validationAndFormat(char *commandString) {
             if (cur_len < 510) {
               //putchar(currChar);
                 commandString[cur_len] = currChar;
-                printf("%s \n", commandString);
+                //printf("%s \n", commandString);
             }
         }
 
@@ -314,7 +314,6 @@ void validationAndFormat(char *commandString) {
 
          //currChar = get_byte(get_byte_argument);
 
-
         //putchar(currChar);
         //puts("Test8"); 
     }
@@ -329,7 +328,7 @@ void validationAndFormat(char *commandString) {
    //puts("Test10");
 
     //puts(commandString);
-    //return commandString;
+    return commandString;
 
 
 }
