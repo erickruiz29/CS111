@@ -429,7 +429,7 @@ create_simple_command(char *commandString)
   //for(; commandString[curLetter]; curLetter++)
   for(i=startPos; i<curLetter; i++)
   {
-    printf("%s\n", commandString+i);
+    //printf("%s\n", commandString+i);
     //printf("%s\n", commandString+curLetter);
     if(commandString[i] == '<')
     {
@@ -695,13 +695,14 @@ make_command_stream (int (*get_next_byte) (void *),
     if(cLen == 0)
       return NULL;
   }
-
+  
   command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
   //grab command_type
   enum command_type type = grabType(commandString);
-
+  
   while(1) 
   {
+    
     temp_node = create_node(commandString,type);
     if(head == NULL)
     {
@@ -714,18 +715,16 @@ make_command_stream (int (*get_next_byte) (void *),
     }
     tail = temp_node;
 
-    //grab next full command
-    //if(pos+1 == cLen)
-    //{
-    //  validationAndFormat(commandString);
-    //  cLen = strlen(commandString);
-    //  pos = 0;
-    //}
-
-    //grab next command_type
-    //type = grabType(commandString);
     new_stream->commands = &head;
     return new_stream;
+
+    //grab next full command
+    validationAndFormat(commandString);
+    curLetter = 0;
+
+    //grab next command_type
+    type = grabType(commandString);
+
   }
 
     new_stream->commands = &head;
