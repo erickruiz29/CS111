@@ -159,7 +159,7 @@ char* validationAndFormat(char *commandString) {
 
             if (currChar == '\0') {
               //puts(commandString);
-              //printf("%s 1 \n", commandString);
+              //printf("%s \n", commandString);
                return commandString;
               //return ;
             }
@@ -283,7 +283,7 @@ char* validationAndFormat(char *commandString) {
             if ((isalnum(commandString[strlen(commandString)-1]) || is_valid(commandString[strlen(commandString)-1])) && !openParen)
             {
                 //puts(commandString);
-                //printf("%s 2 \n", commandString);
+                //printf("%s \n", commandString);
                 return commandString;
             }
         } 
@@ -331,7 +331,7 @@ char* validationAndFormat(char *commandString) {
 
    //puts("Test10");
 
-    //printf("%s 3 \n", commandString);
+    //printf("%s \n", commandString);
     return commandString;
 
 
@@ -703,7 +703,7 @@ make_command_stream (int (*get_next_byte) (void *),
   //grab command_type
   enum command_type type = grabType(commandString);
   
-  while(1) 
+  while(!feof(get_next_byte_argument)) 
   {
     
     temp_node = create_node(commandString,type);
@@ -719,7 +719,7 @@ make_command_stream (int (*get_next_byte) (void *),
     tail = temp_node;
 
     new_stream->commands = &head;
-    return new_stream;
+    //return new_stream;
 
     //grab next full command
     validationAndFormat(commandString);
