@@ -439,6 +439,7 @@ grabType(char *commandString)
 
       case '(':
       {
+        curLetter++;
         return SUBSHELL_COMMAND;
       }
 
@@ -580,11 +581,12 @@ create_simple_command(char *commandString)
 command_t
 create_subshell_command(char *commandString)
 {
+  //printf("%s\n",commandString+curLetter);
   command_t subshell = checked_malloc(sizeof(struct command));
   subshell->type = SUBSHELL_COMMAND; subshell->status = -1;
   enum command_type type = grabType(commandString);
   command_t command = create_command(commandString, type);
-
+  //printf("%s\n",commandString+curLetter);
   char ch = commandString[curLetter]; 
   curLetter++;
 
@@ -761,7 +763,9 @@ make_command_stream (int (*get_next_byte) (void *),
   command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
   //grab command_type
   enum command_type type = grabType(commandString);
-  
+  //printf("%d\n",type);
+
+  //while theres no more to grab
   while(!feof(get_next_byte_argument)) 
   {
     
