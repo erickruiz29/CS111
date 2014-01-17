@@ -112,6 +112,7 @@ char* validationAndFormat(char *commandString) {
     memset(commandString,0,strlen(commandString));
     //commandString = ""; //return string
     //printf("%s new \n", commandString);
+    //printf("strlen: %u\n", (unsigned)strlen(commandString));
     bool operator = false; // Tests is last two characters are '&&' or '||'
     bool openParen = false; // Tests if there is currently an open set of parentheses
     int parenCount = 0; // number of currently open parentheses
@@ -159,7 +160,7 @@ char* validationAndFormat(char *commandString) {
 
             if (currChar == '\0') {
               //puts(commandString);
-              //printf("%s \n", commandString);
+              //printf("%s 1 \n", commandString);
                return commandString;
               //return ;
             }
@@ -198,7 +199,9 @@ char* validationAndFormat(char *commandString) {
         }
 
         if (currChar != '\n') {
-
+            
+            if (commandString[0] == '\0' && is_special(currChar))
+                syntax_error();
 
             //putchar(currChar);
             //puts("Test5");
@@ -211,12 +214,21 @@ char* validationAndFormat(char *commandString) {
             // Check for misuse of &/| symbols
             if (currChar == '&' || currChar == '|') {
 
-                if (!isalnum(commandString[strlen(commandString)-1])) {
-                    if (operator == true)
+                if (!isalnum(commandString[strlen(commandString)-1]) && !is_valid(commandString[strlen(commandString)-1])) {
+                    if (operator == true) {
+                        //puts("TEST1");
+                        //printf("%s \n", commandString);
+                        //putchar(currChar);
                         syntax_error();
+                    }
 
-                    if (is_special(commandString[strlen(commandString)-1]) && commandString[strlen(commandString)-1] != currChar)
+                    if (is_special(commandString[strlen(commandString)-1]) && commandString[strlen(commandString)-1] != currChar) {
                         syntax_error();
+                    }
+                }
+
+                if(commandString[strlen(commandString)-1] == currChar && operator == false) {
+                    operator = true;
                 }
             }
 
@@ -224,8 +236,9 @@ char* validationAndFormat(char *commandString) {
             //puts("Test6");
 
             // Make sure a letter follows &&/||
-            if (isalnum(currChar) && operator == true)
-                operator == false;
+            if ((isalnum(currChar) || is_valid(currChar)) && operator == true) {
+                operator = false;
+            }
 
             // Keep track of parentheses
             if (currChar == '(') {
@@ -237,6 +250,11 @@ char* validationAndFormat(char *commandString) {
                 if (parenCount == 0)
                     openParen = false;
             }
+
+            if (is_special(currChar) && currChar != '&' && currChar != '|') {
+                if (is_special(commandString[strlen(commandString)-1]))
+                    syntax_error();
+            }
         }
 
 
@@ -246,6 +264,8 @@ char* validationAndFormat(char *commandString) {
 
 
         if (currChar == '\n') {
+            
+
             if (commandString[strlen(commandString)-1] == '&' || commandString[strlen(commandString)-1] == '|') {
                 prevChar = currChar;
                 currChar = get_byte(get_byte_argument);
@@ -283,9 +303,11 @@ char* validationAndFormat(char *commandString) {
             if ((isalnum(commandString[strlen(commandString)-1]) || is_valid(commandString[strlen(commandString)-1])) && !openParen)
             {
                 //puts(commandString);
-                //printf("%s \n", commandString);
+                //printf("%s 2 \n", commandString);
                 return commandString;
             }
+
+            
         } 
 
 
@@ -299,7 +321,7 @@ char* validationAndFormat(char *commandString) {
             if (cur_len < 1022) {
               //putchar(currChar);
                 commandString[cur_len] = currChar;
-                //printf("%s \n", commandString);
+                //printf("%s 3 \n", commandString);
             }
         }
 
@@ -331,8 +353,11 @@ char* validationAndFormat(char *commandString) {
 
    //puts("Test10");
 
-    //printf("%s \n", commandString);
-    return commandString;
+    //printf("%s 3 \n", commandString);
+    if (is_special(commandString[strlen(commandString)-1]))
+        syntax_error();
+
+    return commandString;  
 
 
 }
