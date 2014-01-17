@@ -15,7 +15,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 int linecount;
-size_t curLetter;
+int curLetter;
 size_t startPos;
 int (*get_byte) (void *);
 void *get_byte_argument;
@@ -388,19 +388,22 @@ grabType(char *commandString)
   startPos = curLetter;
   char de;
   char ch = commandString[curLetter];
-
+  printf("%d,%s\n", curLetter,commandString+curLetter);
+  int cnt = 0;
   while(1)
   {
+    printf("while%d%c,%s\n", cnt,commandString[curLetter],commandString+curLetter);
     //the special characters that make the unique cases
     switch(ch) 
     {
 
       case '&':
-        de = commandString[curLetter];
         curLetter++;
+        de = commandString[curLetter];
+        
         if(de == '&')
         {
-          //curLetter++;
+          curLetter++;
           return AND_COMMAND;
         }
         break;
@@ -416,6 +419,7 @@ grabType(char *commandString)
         return SIMPLE_COMMAND;
       }
       case '|':
+        curLetter++;
         de = commandString[curLetter];
         
         
@@ -427,6 +431,7 @@ grabType(char *commandString)
 
         else if(isalnum(de) || strchr("!%+,-./:@^_\t\n ", de))
         {
+          printf("\nwhile%d%c,%s\n", cnt,commandString[curLetter],commandString+curLetter);
           return PIPE_COMMAND;
         }
 
@@ -437,7 +442,7 @@ grabType(char *commandString)
     }
     curLetter++;
     ch = commandString[curLetter];
-    curLetter++;
+    cnt++;
   }
   return SEQUENCE_COMMAND;
 }
@@ -453,7 +458,7 @@ create_simple_command(char *commandString)
   size_t curWordSize; size_t index = 0; bool inWord = false;
   bool inInput = false; bool inOutput = false;
   bool input = false; bool output = false;
-  size_t i; size_t len = strlen(commandString);
+  int i; int len = strlen(commandString);
   //for(; commandString[curLetter]; curLetter++)
   for(i=startPos; i<curLetter; i++)
   {
@@ -610,9 +615,9 @@ create_multi_command(char *commandString, enum command_type type, command_t call
 
   else if(type == PIPE_COMMAND && caller->type != PIPE_COMMAND)
     multi_command->u.command[0] = caller->u.command[1];
-  
+  printf("before%d,%s\n", curLetter,commandString+curLetter);
   enum command_type next_type = grabType(commandString);
-  
+  printf("after%d,%s\n", curLetter,commandString+curLetter);
   if(next_type == SIMPLE_COMMAND || next_type == SEQUENCE_COMMAND)
   {
     multi_command->u.command[1] = create_simple_command(commandString);
