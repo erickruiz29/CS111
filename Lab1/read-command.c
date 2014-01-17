@@ -116,6 +116,7 @@ char* validationAndFormat(char *commandString) {
     bool operator = false; // Tests is last two characters are '&&' or '||'
     bool openParen = false; // Tests if there is currently an open set of parentheses
     int parenCount = 0; // number of currently open parentheses
+    bool omit = false;
 
     //puts("Test1");
 
@@ -136,13 +137,17 @@ char* validationAndFormat(char *commandString) {
 
 
         //Test if currChar is an illegal character
-        if (!isalnum(currChar) && !is_special(currChar) && !isspace(currChar) && !is_valid(currChar))
+        if (!isalnum(currChar) && !is_special(currChar) && !isspace(currChar) && !is_valid(currChar)) {
+            //puts("TEST*");
             syntax_error();
+        }
 
         // Test invalid uses of semicolon
         if (currChar == ';') {
-            if (prevChar == ';' || prevChar == '\n' || prevChar == '\0')
+            if (prevChar == ';' || prevChar == '\n' || prevChar == '\0') {
+                //puts("TESTD");
                 syntax_error();
+            }
         }
 
         
@@ -200,21 +205,26 @@ char* validationAndFormat(char *commandString) {
 
         if (currChar != '\n') {
             
-            if (commandString[0] == '\0' && is_special(currChar))
+            if (commandString[0] == '\0' && is_special(currChar) && currChar != '(') {
+                //puts("TEST0");
                 syntax_error();
+            }
 
             //putchar(currChar);
             //puts("Test5");
 
             // Check if operators come after newline
             if (prevChar == '\n')
-              if ( is_special(currChar) && (currChar != '(' || currChar != ')') )
+              if ( is_special(currChar) && (currChar != '(' || currChar != ')') ) {
+                //puts("TESTA");
                 syntax_error();
+              }
 
             // Check for misuse of &/| symbols
             if (currChar == '&' || currChar == '|') {
 
-                if (!isalnum(commandString[strlen(commandString)-1]) && !is_valid(commandString[strlen(commandString)-1])) {
+                if (!isalnum(commandString[strlen(commandString)-1]) && !is_valid(commandString[strlen(commandString)-1])
+                   && commandString[strlen(commandString)-1] != ')') {
                     if (operator == true) {
                         //puts("TEST1");
                         //printf("%s \n", commandString);
@@ -223,16 +233,18 @@ char* validationAndFormat(char *commandString) {
                     }
 
                     if (is_special(commandString[strlen(commandString)-1]) && commandString[strlen(commandString)-1] != currChar) {
+                        //puts("TEST2");
                         syntax_error();
                     }
                 }
 
                 if(commandString[strlen(commandString)-1] == currChar && operator == false) {
+                    //printf("%s test \n", commandString);
                     operator = true;
                 }
             }
 
-            //putchar(currChar);
+          //putchar(currChar);
             //puts("Test6");
 
             // Make sure a letter follows &&/||
@@ -252,8 +264,10 @@ char* validationAndFormat(char *commandString) {
             }
 
             if (is_special(currChar) && currChar != '&' && currChar != '|') {
-                if (is_special(commandString[strlen(commandString)-1]))
+                if (is_special(commandString[strlen(commandString)-1])) {
+                    //puts("TESTM");
                     syntax_error();
+                }    
             }
         }
 
@@ -274,8 +288,11 @@ char* validationAndFormat(char *commandString) {
             else if (isalnum(commandString[strlen(commandString)-1]) && openParen) {
                 if (!feof(get_byte_argument)) {
                     //puts("SEG1");
+                    //putchar(currChar);
                     currChar = get_byte(get_byte_argument);
-                    //puts("SEG2");
+                    //puts("+");
+                    //putchar(currChar);
+                    //puts("+");
                 }
                 else
                   break;
@@ -290,15 +307,22 @@ char* validationAndFormat(char *commandString) {
                     size_t cur_len = strlen(commandString);
                     if (cur_len < 1022) {
                         commandString[cur_len] = currChar;
+                        prevChar = currChar;
+                        currChar = get_byte(get_byte_argument);
+                        //printf("%s 2 \n", commandString);
                         continue;
                     }
                 }
-                else if (!openParen && !feof(get_byte_argument))
+                else if (!openParen && !feof(get_byte_argument)) {
+                     //puts("TESTP");
                      syntax_error();
+                }
             }
 
-            if (prevChar == '<' || prevChar == '>')
+            if (prevChar == '<' || prevChar == '>') {
+                //puts("TESTARROW");
                 syntax_error();
+            }
 
             if ((isalnum(commandString[strlen(commandString)-1]) || is_valid(commandString[strlen(commandString)-1])) && !openParen)
             {
@@ -348,14 +372,19 @@ char* validationAndFormat(char *commandString) {
 
     //puts("Test9");
 
-    if (parenCount != 0)
+    if (parenCount != 0) {
+         //puts("TESTP");    
          syntax_error();
+    }     
 
    //puts("Test10");
 
     //printf("%s 3 \n", commandString);
-    if (is_special(commandString[strlen(commandString)-1]))
+    if (is_special(commandString[strlen(commandString)-1]) && currChar != ')' && !feof(get_byte_argument)) {
+        //putchar(currChar);
+        //puts("TESTZ");
         syntax_error();
+    }
 
     return commandString;  
 
@@ -388,11 +417,11 @@ grabType(char *commandString)
   startPos = curLetter;
   char de;
   char ch = commandString[curLetter];
-  printf("%d,%s\n", curLetter,commandString+curLetter);
+  //printf("%d,%s\n", curLetter,commandString+curLetter);
   int cnt = 0;
   while(1)
   {
-    printf("while%d%c,%s\n", cnt,commandString[curLetter],commandString+curLetter);
+    //printf("while%d%c,%s\n", cnt,commandString[curLetter],commandString+curLetter);
     //the special characters that make the unique cases
     switch(ch) 
     {
@@ -431,7 +460,7 @@ grabType(char *commandString)
 
         else if(isalnum(de) || strchr("!%+,-./:@^_\t\n ", de))
         {
-          printf("\nwhile%d%c,%s\n", cnt,commandString[curLetter],commandString+curLetter);
+          //printf("\nwhile%d%c,%s\n", cnt,commandString[curLetter],commandString+curLetter);
           return PIPE_COMMAND;
         }
 
@@ -615,9 +644,9 @@ create_multi_command(char *commandString, enum command_type type, command_t call
 
   else if(type == PIPE_COMMAND && caller->type != PIPE_COMMAND)
     multi_command->u.command[0] = caller->u.command[1];
-  printf("before%d,%s\n", curLetter,commandString+curLetter);
+  //printf("before%d,%s\n", curLetter,commandString+curLetter);
   enum command_type next_type = grabType(commandString);
-  printf("after%d,%s\n", curLetter,commandString+curLetter);
+  //printf("after%d,%s\n", curLetter,commandString+curLetter);
   if(next_type == SIMPLE_COMMAND || next_type == SEQUENCE_COMMAND)
   {
     multi_command->u.command[1] = create_simple_command(commandString);
