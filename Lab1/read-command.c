@@ -130,8 +130,13 @@ char* validationAndFormat(char *commandString) {
 
       //putchar(currChar);
 
-        if (currChar == EOF || currChar == '\0')
-          break;
+        if (currChar == EOF || currChar == '\0') {
+          if (is_special(commandString[strlen(commandString)-1])) {
+            syntax_error();
+          }
+          else
+            break;
+        }
 
         //puts("Test2");
 
@@ -266,10 +271,14 @@ char* validationAndFormat(char *commandString) {
             }
 
             if (is_special(currChar) && currChar != '&' && currChar != '|') {
-                if (is_special(commandString[strlen(commandString)-1])) {
+                if (is_special(commandString[strlen(commandString)-1] && currChar != '(')) {
                     //puts("TESTM");
                     syntax_error();
                 }    
+            }
+
+            if ((currChar == '<' || currChar == '>') && is_special(commandString[strlen(commandString)-1])) {
+                syntax_error();
             }
         }
 
@@ -403,7 +412,7 @@ char* validationAndFormat(char *commandString) {
    //puts("Test10");
 
     //printf("%s 3 \n", commandString);
-    if (is_special(commandString[strlen(commandString)-1]) && currChar != ')' && !feof(get_byte_argument)) {
+    if (is_special(commandString[strlen(commandString)-1]) && currChar != ')') {
         //putchar(currChar);
         //puts("TESTZ");
         syntax_error();
