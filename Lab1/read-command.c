@@ -403,7 +403,7 @@ char* validationAndFormat(char *commandString) {
    //puts("Test10");
 
     //printf("%s 3 \n", commandString);
-    if (is_special(commandString[strlen(commandString)-1]) && currChar != ')') {
+    if (is_special(commandString[strlen(commandString)-1]) && currChar != ')' && !feof(get_byte_argument)) {
         //putchar(currChar);
         //puts("TESTZ");
         syntax_error();
@@ -445,8 +445,7 @@ grabType(char *commandString)
   int cnt = 0;
   while(1)
   {
-    //printf("while%s\n",commandString+curLetter);
-    //getchar();
+    //printf("while%d%c,%s\n", cnt,commandString[curLetter],commandString+curLetter);
     //the special characters that make the unique cases
     switch(ch) 
     {
@@ -454,10 +453,9 @@ grabType(char *commandString)
       case '&':
         curLetter++;
         de = commandString[curLetter];
-        //printf("in &");
+        
         if(de == '&')
         {
-          //printf("in &\n");
           curLetter++;
           return AND_COMMAND;
         }
@@ -471,7 +469,7 @@ grabType(char *commandString)
 
       case ')':
       {
-        //curLetter--;
+        curLetter--;
         return SIMPLE_COMMAND;
       }
       case '|':
@@ -612,7 +610,7 @@ create_subshell_command(char *commandString)
   subshell->type = SUBSHELL_COMMAND; subshell->status = -1;
   enum command_type type = grabType(commandString);
   command_t command = create_command(commandString, type);
-  //printf("after command%s\n",commandString+curLetter);
+  //printf("%s\n",commandString+curLetter);
   char ch = commandString[curLetter]; 
   curLetter++;
 
@@ -672,9 +670,9 @@ create_multi_command(char *commandString, enum command_type type, command_t call
 
   else if(type == PIPE_COMMAND && caller->type != PIPE_COMMAND)
     multi_command->u.command[0] = caller->u.command[1];
-  //printf("before,%s\n",commandString+curLetter);
+  //printf("before%d,%s\n", curLetter,commandString+curLetter);
   enum command_type next_type = grabType(commandString);
-  //printf("after,%s\n",commandString+curLetter);
+  //printf("after%d,%s\n", curLetter,commandString+curLetter);
   if(next_type == SIMPLE_COMMAND || next_type == SEQUENCE_COMMAND)
   {
     multi_command->u.command[1] = create_simple_command(commandString);
@@ -792,7 +790,7 @@ make_command_stream (int (*get_next_byte) (void *),
   //printf("%d\n",type);
 
   //while theres no more to grab
-  while(1) 
+  while(!feof(get_next_byte_argument)) 
   {
     
     temp_node = create_node(commandString,type);
@@ -813,12 +811,6 @@ make_command_stream (int (*get_next_byte) (void *),
     //grab next full command
     validationAndFormat(commandString);
     curLetter = 0;
-
-    if(strlen(commandString) == 0)
-    {
-      new_stream->commands = &head;
-      return new_stream;
-    }
 
     //grab next command_type
     type = grabType(commandString);

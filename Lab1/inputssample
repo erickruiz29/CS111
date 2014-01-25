@@ -1,0 +1,178 @@
+ 
+t 
+tr 
+tru 
+true 
+true
+ 
+g 
+g+ 
+g++ 
+g++ - 
+g++ -c 
+g++ -c f 
+g++ -c fo 
+g++ -c foo 
+g++ -c foo. 
+g++ -c foo.c 
+g++ -c foo.c
+ 
+: 
+: : 
+: : : 
+: : :
+ 
+c 
+ca 
+cat 
+cat< 
+cat</ 
+cat</e 
+cat</et 
+cat</etc 
+cat</etc/ 
+cat</etc/p 
+cat</etc/pa 
+cat</etc/pas 
+cat</etc/pass 
+cat</etc/passw 
+cat</etc/passwd 
+cat</etc/passwd| 
+cat</etc/passwd|t 
+cat</etc/passwd|tr 
+cat</etc/passwd|tr a 
+cat</etc/passwd|tr a- 
+cat</etc/passwd|tr a-z 
+cat</etc/passwd|tr a-z A 
+cat</etc/passwd|tr a-z A- 
+cat</etc/passwd|tr a-z A-Z 
+cat</etc/passwd|tr a-z A-Z| 
+cat</etc/passwd|tr a-z A-Z|s 
+cat</etc/passwd|tr a-z A-Z|so 
+cat</etc/passwd|tr a-z A-Z|sor 
+cat</etc/passwd|tr a-z A-Z|sort 
+cat</etc/passwd|tr a-z A-Z|sort - 
+cat</etc/passwd|tr a-z A-Z|sort -u 
+cat</etc/passwd|tr a-z A-Z|sort -u| 
+cat</etc/passwd|tr a-z A-Z|sort -u|| 
+cat</etc/passwd|tr a-z A-Z|sort -u||e 
+cat</etc/passwd|tr a-z A-Z|sort -u||ec 
+cat</etc/passwd|tr a-z A-Z|sort -u||ech 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo s 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo so 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo sor 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo sort 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo sort f 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo sort fa 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo sort fai 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo sort fail 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo sort faile 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo sort failed 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo sort failed! 
+cat</etc/passwd|tr a-z A-Z|sort -u||echo sort failed!
+ 
+a 
+a b 
+a b< 
+a b<c 
+a b<c> 
+a b<c>d 
+a b<c>d
+ 
+c 
+ca 
+cat 
+cat< 
+cat</ 
+cat</e 
+cat</et 
+cat</etc 
+cat</etc/ 
+cat</etc/p 
+cat</etc/pa 
+cat</etc/pas 
+cat</etc/pass 
+cat</etc/passw 
+cat</etc/passwd 
+cat</etc/passwd| 
+cat</etc/passwd|t 
+cat</etc/passwd|tr 
+cat</etc/passwd|tr a 
+cat</etc/passwd|tr a- 
+cat</etc/passwd|tr a-z 
+cat</etc/passwd|tr a-z A 
+cat</etc/passwd|tr a-z A- 
+cat</etc/passwd|tr a-z A-Z 
+cat</etc/passwd|tr a-z A-Z| 
+cat</etc/passwd|tr a-z A-Z|s 
+cat</etc/passwd|tr a-z A-Z|so 
+cat</etc/passwd|tr a-z A-Z|sor 
+cat</etc/passwd|tr a-z A-Z|sort 
+cat</etc/passwd|tr a-z A-Z|sort - 
+cat</etc/passwd|tr a-z A-Z|sort -u 
+cat</etc/passwd|tr a-z A-Z|sort -u> 
+cat</etc/passwd|tr a-z A-Z|sort -u>o 
+cat</etc/passwd|tr a-z A-Z|sort -u>ou 
+cat</etc/passwd|tr a-z A-Z|sort -u>out 
+cat</etc/passwd|tr a-z A-Z|sort -u>out| 
+cat</etc/passwd|tr a-z A-Z|sort -u>out|| 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||e 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||ec 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||ech 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo s 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo so 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo sor 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo sort 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo sort f 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo sort fa 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo sort fai 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo sort fail 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo sort faile 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo sort failed 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo sort failed! 
+cat</etc/passwd|tr a-z A-Z|sort -u>out||echo sort failed!
+ 
+a 
+a& 
+a&& 
+a&&b 
+a&&b| 
+a&&b|| 
+a&&b||c 
+a&&b||c& 
+a&&b||c&& 
+a&&b||c&&d 
+a&&b||c&&d| 
+a&&b||c&&d|e 
+a&&b||c&&d|e& 
+a&&b||c&&d|e&& 
+a&&b||c&&d|e&&f 
+a&&b||c&&d|e&&f| 
+a&&b||c&&d|e&&f|g 
+a&&b||c&&d|e&&f|g< 
+a&&b||c&&d|e&&f|g<h 
+a&&b||c&&d|e&&f|g<h
+ 
+TestS
+a 
+a< 
+a<b 
+a<b> 
+a<b>c 
+a<b>c| 
+a<b>c|d 
+a<b>c|d< 
+a<b>c|d<e 
+a<b>c|d<e> 
+a<b>c|d<e>f 
+a<b>c|d<e>f| 
+a<b>c|d<e>f|g 
+a<b>c|d<e>f|g< 
+a<b>c|d<e>f|g<h 
+a<b>c|d<e>f|g<h> 
+a<b>c|d<e>f|g<h>i 
+a<b>c|d<e>f|g<h>i
+ 
+
