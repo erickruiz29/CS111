@@ -165,7 +165,7 @@ char* validationAndFormat(char *commandString) {
 
             if (currChar == '\0') {
               //puts(commandString);
-              //printf("%s 1 \n", commandString);
+              //printf("%s \n", commandString);
                return commandString;
               //return ;
             }
@@ -245,7 +245,9 @@ char* validationAndFormat(char *commandString) {
             }
 
           //putchar(currChar);
+
             //puts("Test6");
+
 
             // Make sure a letter follows &&/||
             if ((isalnum(currChar) || is_valid(currChar)) && operator == true) {
@@ -278,14 +280,19 @@ char* validationAndFormat(char *commandString) {
 
 
         if (currChar == '\n') {
-            
+
+            //puts("SEGa"); 
 
             if (commandString[strlen(commandString)-1] == '&' || commandString[strlen(commandString)-1] == '|') {
                 prevChar = currChar;
-                currChar = get_byte(get_byte_argument);
+                //puts("SEGb");
+                if (!feof(get_byte_argument)) {
+                    currChar = get_byte(get_byte_argument);
+                }
                 continue;
             }
             else if (isalnum(commandString[strlen(commandString)-1]) && openParen) {
+                //puts("SEGc");
                 if (!feof(get_byte_argument)) {
                     //puts("SEG1");
                     //putchar(currChar);
@@ -296,6 +303,8 @@ char* validationAndFormat(char *commandString) {
                 }
                 else
                   break;
+
+                //puts("SEGd");
 
                 if ((isalnum(currChar) || is_valid(currChar)) && openParen)  {
                     size_t cur_len = strlen(commandString);
@@ -309,6 +318,12 @@ char* validationAndFormat(char *commandString) {
                         commandString[cur_len] = currChar;
                         prevChar = currChar;
                         currChar = get_byte(get_byte_argument);
+                        //puts("SEG2");
+                        if (!feof(get_byte_argument)) {
+                            currChar = get_byte(get_byte_argument);
+                        }
+                        else
+                            break; 
                         //printf("%s 2 \n", commandString);
                         continue;
                     }
@@ -319,15 +334,23 @@ char* validationAndFormat(char *commandString) {
                 }
             }
 
+
+            //puts("SEGe");
+
             if (prevChar == '<' || prevChar == '>') {
                 //puts("TESTARROW");
                 syntax_error();
             }
 
+            //puts("SEGf");
+            //printf("%s \n", commandString);
+            //putchar(currChar);
+
             if ((isalnum(commandString[strlen(commandString)-1]) || is_valid(commandString[strlen(commandString)-1])) && !openParen)
             {
                 //puts(commandString);
-                //printf("%s 2 \n", commandString);
+                //printf("%s \n", commandString);
+              //puts("SEGg");
                 return commandString;
             }
 
@@ -336,7 +359,7 @@ char* validationAndFormat(char *commandString) {
 
 
      
-
+       //puts("Test7/8"); 
 
 
 
@@ -380,12 +403,13 @@ char* validationAndFormat(char *commandString) {
    //puts("Test10");
 
     //printf("%s 3 \n", commandString);
-    if (is_special(commandString[strlen(commandString)-1]) && currChar != ')' && !feof(get_byte_argument)) {
+    if (is_special(commandString[strlen(commandString)-1]) && currChar != ')') {
         //putchar(currChar);
         //puts("TESTZ");
         syntax_error();
     }
 
+    //printf("%s \n", commandString);
     return commandString;  
 
 
