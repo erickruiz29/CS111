@@ -2,11 +2,30 @@
 
 #include "command.h"
 #include "command-internals.h"
+#include "alloc.h"
 
 #include <error.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
 
 /* FIXME: You may need to add #include directives, macro definitions,
    static function definitions, etc.  */
+
+enum file_type
+{
+	READ_FILE,
+	WRITE_FILE
+};
+
+struct file_node {
+	char *name;
+	enum file_type type;
+	file_node_t next;
+	file_node_t prev;
+};
 
 int
 command_status (command_t c)

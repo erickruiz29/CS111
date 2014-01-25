@@ -463,13 +463,13 @@ grabType(char *commandString)
 
       case '(':
       {
+        startPos++;
         curLetter++;
         return SUBSHELL_COMMAND;
       }
 
       case ')':
       {
-        curLetter--;
         return SIMPLE_COMMAND;
       }
       case '|':
@@ -514,9 +514,10 @@ create_simple_command(char *commandString)
   bool input = false; bool output = false;
   int i; int len = strlen(commandString);
   //for(; commandString[curLetter]; curLetter++)
+  //printf("Before For%s\n", commandString+startPos);
   for(i=startPos; i<curLetter; i++)
   {
-    //printf("%s\n", commandString+i);
+    //printf("insideSimple%s\n", commandString+i);
     //printf("%s\n", commandString+curLetter);
     if(commandString[i] == '<')
     {
@@ -590,13 +591,15 @@ create_simple_command(char *commandString)
     }
     else if(is_special(commandString[i]))
     {
+      //printf("IsSpecial%s\n",commandString+i);
       if(index >= wordSize)
         checked_grow_alloc(command->u.word, &wordSize);
       return command;
     }
 
   }
-  memset((void *) commandString, '\0', 1024);
+  //memset((void *) commandString, '\0', 1024);
+
   if(index >= wordSize)
         checked_grow_alloc(command->u.word, &wordSize);
   return command;
@@ -605,17 +608,24 @@ create_simple_command(char *commandString)
 command_t
 create_subshell_command(char *commandString)
 {
+  size_t preStartPos;
   //printf("%s\n",commandString+curLetter);
   command_t subshell = checked_malloc(sizeof(struct command));
   subshell->type = SUBSHELL_COMMAND; subshell->status = -1;
+  preStartPos = startPos;
   enum command_type type = grabType(commandString);
+  startPos = preStartPos;
+  //printf("%s\n",commandString+startPos);
+  //printf("%d\n", type);
   command_t command = create_command(commandString, type);
   //printf("%s\n",commandString+curLetter);
   char ch = commandString[curLetter]; 
-  curLetter++;
+  curLetter++; int g = 0;
 
+  //printf("after && %s\n",commandString+curLetter);
   if(ch == ')')
   {
+    //printf("returned\n");
     subshell->u.subshell_command = command;
     return subshell;
   }
@@ -627,11 +637,12 @@ create_subshell_command(char *commandString)
     top->u.command[0] = command; top->u.command[1] = NULL;
     ch = commandString[curLetter];
     curLetter++;
-    while(ch != ')')
+    //printf("%s\n",commandString+curLetter);
+    while(ch != ')' && g < 3)
     {
       curLetter--;
       enum command_type type = grabType(commandString);
-
+      //printf("%s\n",commandString+curLetter);
       command_t new_sequence = checked_malloc(sizeof(struct command));
       new_sequence->type = SEQUENCE_COMMAND; new_sequence->status = -1;
       new_sequence->u.command[0] = create_command(commandString, type);
@@ -643,6 +654,7 @@ create_subshell_command(char *commandString)
       
       bottom->u.command[1] = new_sequence;
       curLetter++;
+      g++;
     }
     command_t bottom = top;
     while(bottom->u.command[1]->u.command[1] != NULL)
@@ -672,10 +684,13 @@ create_multi_command(char *commandString, enum command_type type, command_t call
     multi_command->u.command[0] = caller->u.command[1];
   //printf("before%d,%s\n", curLetter,commandString+curLetter);
   enum command_type next_type = grabType(commandString);
-  //printf("after%d,%s\n", curLetter,commandString+curLetter);
+  //printf("after%d,%s\n", next_type,commandString+curLetter);
   if(next_type == SIMPLE_COMMAND || next_type == SEQUENCE_COMMAND)
   {
+    //printf("%s\n", commandString+startPos);
+    //printf("%s\n", commandString+curLetter);
     multi_command->u.command[1] = create_simple_command(commandString);
+    //printf("returned %s\n", commandString+curLetter);
     return multi_command;
   }
 
@@ -787,12 +802,12 @@ make_command_stream (int (*get_next_byte) (void *),
   command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
   //grab command_type
   enum command_type type = grabType(commandString);
-  //printf("%d\n",type);
+  //printf("%s\n",commandString);
 
   //while theres no more to grab
-  while(!feof(get_next_byte_argument)) 
+  while(cLen != 0) 
   {
-    
+    //printf("%s\n",commandString);
     temp_node = create_node(commandString,type);
     if(head == NULL)
     {
@@ -810,7 +825,9 @@ make_command_stream (int (*get_next_byte) (void *),
 
     //grab next full command
     validationAndFormat(commandString);
+    cLen = strlen(commandString);
     curLetter = 0;
+    //printf("%s\n", commandString);
 
     //grab next command_type
     type = grabType(commandString);
