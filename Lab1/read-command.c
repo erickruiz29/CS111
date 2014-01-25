@@ -131,10 +131,6 @@ char* validationAndFormat(char *commandString) {
       //putchar(currChar);
 
         if (currChar == EOF || currChar == '\0') {
-          if (is_special(commandString[strlen(commandString)-1])) {
-            syntax_error();
-          }
-          else
             break;
         }
 
@@ -412,8 +408,8 @@ char* validationAndFormat(char *commandString) {
    //puts("Test10");
 
     //printf("%s 3 \n", commandString);
-    if (is_special(commandString[strlen(commandString)-1]) && currChar != ')') {
-        //putchar(currChar);
+    if (is_special(commandString[strlen(commandString)-1]) && commandString[strlen(commandString)-1] != ')') {
+        putchar(currChar);
         //puts("TESTZ");
         syntax_error();
     }
