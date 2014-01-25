@@ -14,7 +14,7 @@
 /* FIXME: You may need to add #include directives, macro definitions,
    static function definitions, etc.  */
 
-enum file_type
+/*enum file_type
 {
 	READ_FILE,
 	WRITE_FILE
@@ -25,7 +25,9 @@ struct file_node {
 	enum file_type type;
 	file_node_t next;
 	file_node_t prev;
-};
+};*/
+
+
 
 int
 command_status (command_t c)
