@@ -32,6 +32,8 @@ struct command_node
 struct command_stream
 {
   command_node_t* commands;
+  command_node_t* first;
+  command_node_t* next;
 };
 
 command_t
@@ -807,6 +809,9 @@ make_command_stream (int (*get_next_byte) (void *),
   }
   
   command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
+  new_stream->first = NULL;
+  new_stream->next = NULL;
+
   //grab command_type
   enum command_type type = grabType(commandString);
   //printf("%s\n",commandString);
@@ -828,6 +833,11 @@ make_command_stream (int (*get_next_byte) (void *),
     tail = temp_node;
 
     new_stream->commands = &head;
+    if(new_stream->first == NULL)
+    {
+      new_stream->first = &head;
+      new_stream->next = &head;
+    }
     //return new_stream;
 
     //grab next full command
@@ -847,21 +857,46 @@ make_command_stream (int (*get_next_byte) (void *),
 
 }
 
+/*
+struct command_node
+{
+  command_t theCommand;
+  command_node_t next;
+  command_node_t prev;
+};
+
+struct command_stream
+{
+  command_node_t* commands;
+  command_node_t* first;
+  command_node_t* next;
+};
+*/
+
 command_t
 read_command_stream (command_stream_t s)
 {
-  if(s==NULL)
-    return NULL;
-  if(*(s->commands) != NULL)
+  //printf("Stream First %d\n", (*(s->next))->theCommand->type);
+
+  if(*(s->next) != NULL)
   {
-    command_node_t stream = *(s->commands);
-    *(s->commands) = stream->next;
-    if(stream->prev != NULL)
-    {
-      free(stream->prev->theCommand);
-      free(stream->prev);
-    }
+    command_node_t stream = *(s->next);
+    s->next = &(stream->next);
+
     return stream->theCommand;
+  }
+  //end of stream, clean up
+  else
+  {
+    command_node_t temp = *(s->first);
+    while(temp != NULL)
+    {
+      command_node_t del = temp;
+      temp = temp->next;
+      //printf("Freeing %d\n", del->theCommand->type);
+      free(del->theCommand);
+      free(del);
+    }
   }
   return NULL;
 }

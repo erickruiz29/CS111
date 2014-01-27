@@ -58,16 +58,16 @@ main (int argc, char **argv)
     {
       //puts("TESTWHILE");
       if (print_tree)
-	{
-	  printf ("# %d\n", command_number++);
-	  print_command (command);
-	}
+    	{
+    	  printf ("# %d\n", command_number++);
+    	  print_command (command);
+    	}
       else
-	{
-	  last_command = command;
-	  execute_command (command, time_travel);
-    //puts("TESTEXECUTE");
-	}
+    	{
+    	  last_command = command;
+    	  execute_command (command, time_travel);
+        //puts("TESTEXECUTE");
+    	}
     //puts("TESTWHILEEND");
     }
 

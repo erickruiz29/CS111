@@ -39,31 +39,37 @@ void
 execute_simple_command (command_t c)
 {
   pid_t child = fork();
-  if (child == 0) {
+  if (child == 0) 
+  {
     int fd_in;
     int fd_out;
-    if (c->input != NULL) {
+    if (c->input != NULL) 
+    {
       // cmd < file
       if ((fd_in = open(c->input, O_RDONLY, 0666)) == -1)
         error(1, 0, "cannot open input file!");
       if (dup2(fd_in, STDIN_FILENO) == -1)
         error(1, 0, "cannot do input redirect");
-      //close(fd_in);
+      close(fd_in);
     }
-    if (c->output != NULL) {
+    if (c->output != NULL) 
+    {
       // cmd > file
       //puts(c->output);
       if ((fd_out = open(c->output, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IRGRP|S_IWGRP|S_IWUSR)) == -1)
         error(1, 0, "cannot open output file!");
       if (dup2(fd_out, STDOUT_FILENO) == -1)
         error(1, 0, "cannot do output redirect");
+      close(fd_out);
     }
     // handle execution
     execvp(c->u.word[0], c->u.word); // one function that executes command
-    error(1, 0, "can't execute command!");
+    exit(c->status);
+    //error(1, 0, "can't execute command!");
   }
 
-  else if (child > 0) {
+  else if (child > 0) 
+  {
     int status;
     // wait for the child process
     if ( (waitpid(child, &status, 0)) == -1)
@@ -96,7 +102,6 @@ execute_and_command (command_t c) {
 void
 execute_or_command (command_t c) {
   execute_command(c->u.command[0], 0);
-
   //puts("TESTOR");
 
   if (c->u.command[0]->status == 0) {
@@ -129,7 +134,6 @@ execute_command (command_t c, int time_travel)
   /* FIXME: Replace this with your implementation.  You may need to
      add auxiliary functions and otherwise modify the source code.
      You can also use external functions defined in the GNU C Library.  */
-
      if (!time_travel) 
      {
       switch(c->type)
