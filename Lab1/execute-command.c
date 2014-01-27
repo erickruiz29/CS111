@@ -108,6 +108,15 @@ execute_or_command (command_t c) {
   }
 }
 
+void
+execute_sequence_command(command_t c) {
+  execute_command(c->u.command[0], 0);
+  execute_command(c->u.command[1], 0);
+  c->status = c->u.command[1]->status;
+}
+
+
+
 int
 command_status (command_t c)
 {
@@ -136,11 +145,11 @@ execute_command (command_t c, int time_travel)
           break;
         /*case PIPE_COMMAND:
           execute_pipe_command(c);
-          break;
+          break;*/
         case SEQUENCE_COMMAND:
           execute_sequence_command(c);
           break;
-        case SUBSHELL_COMMAND:
+        /*case SUBSHELL_COMMAND:
           execute_subshell_command(c);
           break;*/
         default:
