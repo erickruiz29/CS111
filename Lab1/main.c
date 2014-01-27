@@ -56,6 +56,7 @@ main (int argc, char **argv)
   command_t command;
   while ((command = read_command_stream (command_stream)))
     {
+      //puts("TESTWHILE");
       if (print_tree)
 	{
 	  printf ("# %d\n", command_number++);
@@ -65,8 +66,11 @@ main (int argc, char **argv)
 	{
 	  last_command = command;
 	  execute_command (command, time_travel);
+    //puts("TESTEXECUTE");
 	}
+    //puts("TESTWHILEEND");
     }
 
+  //puts("TESTEND");  
   return print_tree || !last_command ? 0 : command_status (last_command);
 }

@@ -526,6 +526,7 @@ create_simple_command(char *commandString)
     //printf("%s\n", commandString+curLetter);
     if(commandString[i] == '<')
     {
+      //puts("TestINPUT");
       command->input = checked_malloc(8*sizeof(char));
       inInput = true;
     }
@@ -551,6 +552,7 @@ create_simple_command(char *commandString)
       else if(inInput)
       {
         input = true;
+        //puts("TestINPUT");
         char* string = command->input;
         if(strlen(string) >= inputSize)
           checked_grow_alloc(string, &inputSize);
