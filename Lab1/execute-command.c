@@ -150,7 +150,7 @@ execute_and_command (command_t c)
 {
   execute_command(c->u.command[0], 0);
 
-  if (command_status(c) == 0) {
+  if (command_status(c->u.command[0]) == 0) {
       // run the second command
       execute_command(c->u.command[1], 0);
       // set the status of the AND command
@@ -168,7 +168,7 @@ execute_or_command (command_t c) {
   execute_command(c->u.command[0], 0);
   //puts("TESTOR");
 
-  if (command_status(c) == 0) {
+  if (command_status(c->u.command[0]) == 0) {
       c->status = c->u.command[0]->status;
   }
   else {
