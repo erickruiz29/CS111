@@ -1,0 +1,700 @@
+31983 execve("./timetrash", ["./timetrash", "script02.sh"], [/* 36 vars */]) = 0
+31983 brk(0)                            = 0xe25000
+31983 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7ff125928000
+31983 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+31983 open("/usr/local/cuda/lib64/tls/x86_64/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31983 stat("/usr/local/cuda/lib64/tls/x86_64", 0x7fff914cca40) = -1 ENOENT (No such file or directory)
+31983 open("/usr/local/cuda/lib64/tls/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31983 stat("/usr/local/cuda/lib64/tls", 0x7fff914cca40) = -1 ENOENT (No such file or directory)
+31983 open("/usr/local/cuda/lib64/x86_64/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31983 stat("/usr/local/cuda/lib64/x86_64", 0x7fff914cca40) = -1 ENOENT (No such file or directory)
+31983 open("/usr/local/cuda/lib64/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31983 stat("/usr/local/cuda/lib64", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+31983 open("/etc/ld.so.cache", O_RDONLY) = 3
+31983 fstat(3, {st_mode=S_IFREG|0644, st_size=151109, ...}) = 0
+31983 mmap(NULL, 151109, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7ff125903000
+31983 close(3)                          = 0
+31983 open("/lib64/libc.so.6", O_RDONLY) = 3
+31983 read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\360\355a~2\0\0\0"..., 832) = 832
+31983 fstat(3, {st_mode=S_IFREG|0755, st_size=1922152, ...}) = 0
+31983 mmap(0x327e600000, 3745960, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x327e600000
+31983 mprotect(0x327e78a000, 2093056, PROT_NONE) = 0
+31983 mmap(0x327e989000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x189000) = 0x327e989000
+31983 mmap(0x327e98e000, 18600, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x327e98e000
+31983 close(3)                          = 0
+31983 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7ff125902000
+31983 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7ff125901000
+31983 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7ff125900000
+31983 arch_prctl(ARCH_SET_FS, 0x7ff125901700) = 0
+31983 mprotect(0x327e989000, 16384, PROT_READ) = 0
+31983 mprotect(0x327e01f000, 4096, PROT_READ) = 0
+31983 munmap(0x7ff125903000, 151109)    = 0
+31983 brk(0)                            = 0xe25000
+31983 brk(0xe46000)                     = 0xe46000
+31983 open("script02.sh", O_RDONLY)     = 3
+31983 fstat(3, {st_mode=S_IFREG|0644, st_size=291, ...}) = 0
+31983 mmap(NULL, 65536, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7ff125918000
+31983 read(3, "true\n\ng++ -c foo.c\n\n: : :\n\ncat <"..., 65536) = 291
+31983 read(3, "", 65536)                = 0
+31983 clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff1259019d0) = 31984
+31984 execve("/usr/local/cuda/bin/true", ["true"], [/* 36 vars */] <unfinished ...>
+31983 wait4(31984,  <unfinished ...>
+31984 <... execve resumed> )            = -1 ENOENT (No such file or directory)
+31984 execve("/usr/lib64/qt-3.3/bin/true", ["true"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31984 execve("/usr/local/bin/true", ["true"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31984 execve("/bin/true", ["true"], [/* 36 vars */]) = 0
+31984 brk(0)                            = 0x144f000
+31984 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f01cbb3d000
+31984 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+31984 open("/usr/local/cuda/lib64/tls/x86_64/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31984 stat("/usr/local/cuda/lib64/tls/x86_64", 0x7fffdc91bfe0) = -1 ENOENT (No such file or directory)
+31984 open("/usr/local/cuda/lib64/tls/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31984 stat("/usr/local/cuda/lib64/tls", 0x7fffdc91bfe0) = -1 ENOENT (No such file or directory)
+31984 open("/usr/local/cuda/lib64/x86_64/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31984 stat("/usr/local/cuda/lib64/x86_64", 0x7fffdc91bfe0) = -1 ENOENT (No such file or directory)
+31984 open("/usr/local/cuda/lib64/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31984 stat("/usr/local/cuda/lib64", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+31984 open("/etc/ld.so.cache", O_RDONLY) = 4
+31984 fstat(4, {st_mode=S_IFREG|0644, st_size=151109, ...}) = 0
+31984 mmap(NULL, 151109, PROT_READ, MAP_PRIVATE, 4, 0) = 0x7f01cbb18000
+31984 close(4)                          = 0
+31984 open("/lib64/libc.so.6", O_RDONLY) = 4
+31984 read(4, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\360\355a~2\0\0\0"..., 832) = 832
+31984 fstat(4, {st_mode=S_IFREG|0755, st_size=1922152, ...}) = 0
+31984 mmap(0x327e600000, 3745960, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 4, 0) = 0x327e600000
+31984 mprotect(0x327e78a000, 2093056, PROT_NONE) = 0
+31984 mmap(0x327e989000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4, 0x189000) = 0x327e989000
+31984 mmap(0x327e98e000, 18600, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x327e98e000
+31984 close(4)                          = 0
+31984 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f01cbb17000
+31984 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f01cbb16000
+31984 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f01cbb15000
+31984 arch_prctl(ARCH_SET_FS, 0x7f01cbb16700) = 0
+31984 mprotect(0x327e989000, 16384, PROT_READ) = 0
+31984 mprotect(0x327e01f000, 4096, PROT_READ) = 0
+31984 munmap(0x7f01cbb18000, 151109)    = 0
+31984 exit_group(0)                     = ?
+31983 <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 31984
+31983 --- SIGCHLD (Child exited) @ 0 (0) ---
+31983 clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff1259019d0) = 31985
+31983 wait4(31985,  <unfinished ...>
+31985 execve("/usr/local/cuda/bin/g++", ["g++", "-c", "foo.c"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31985 execve("/usr/lib64/qt-3.3/bin/g++", ["g++", "-c", "foo.c"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31985 execve("/usr/local/bin/g++", ["g++", "-c", "foo.c"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31985 execve("/bin/g++", ["g++", "-c", "foo.c"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31985 execve("/usr/bin/g++", ["g++", "-c", "foo.c"], [/* 36 vars */]) = 0
+31985 brk(0)                            = 0xe2c000
+31985 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f150305e000
+31985 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+31985 open("/usr/local/cuda/lib64/tls/x86_64/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 stat("/usr/local/cuda/lib64/tls/x86_64", 0x7fffeb6810c0) = -1 ENOENT (No such file or directory)
+31985 open("/usr/local/cuda/lib64/tls/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 stat("/usr/local/cuda/lib64/tls", 0x7fffeb6810c0) = -1 ENOENT (No such file or directory)
+31985 open("/usr/local/cuda/lib64/x86_64/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 stat("/usr/local/cuda/lib64/x86_64", 0x7fffeb6810c0) = -1 ENOENT (No such file or directory)
+31985 open("/usr/local/cuda/lib64/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 stat("/usr/local/cuda/lib64", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+31985 open("/etc/ld.so.cache", O_RDONLY) = 4
+31985 fstat(4, {st_mode=S_IFREG|0644, st_size=151109, ...}) = 0
+31985 mmap(NULL, 151109, PROT_READ, MAP_PRIVATE, 4, 0) = 0x7f1503039000
+31985 close(4)                          = 0
+31985 open("/lib64/libc.so.6", O_RDONLY) = 4
+31985 read(4, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\360\355a~2\0\0\0"..., 832) = 832
+31985 fstat(4, {st_mode=S_IFREG|0755, st_size=1922152, ...}) = 0
+31985 mmap(0x327e600000, 3745960, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 4, 0) = 0x327e600000
+31985 mprotect(0x327e78a000, 2093056, PROT_NONE) = 0
+31985 mmap(0x327e989000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4, 0x189000) = 0x327e989000
+31985 mmap(0x327e98e000, 18600, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x327e98e000
+31985 close(4)                          = 0
+31985 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f1503038000
+31985 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f1503037000
+31985 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f1503036000
+31985 arch_prctl(ARCH_SET_FS, 0x7f1503037700) = 0
+31985 mprotect(0x327e989000, 16384, PROT_READ) = 0
+31985 mprotect(0x327e01f000, 4096, PROT_READ) = 0
+31985 munmap(0x7f1503039000, 151109)    = 0
+31985 brk(0)                            = 0xe2c000
+31985 brk(0xe4d000)                     = 0xe4d000
+31985 open("/usr/lib/locale/locale-archive", O_RDONLY) = 4
+31985 fstat(4, {st_mode=S_IFREG|0644, st_size=99158576, ...}) = 0
+31985 mmap(NULL, 99158576, PROT_READ, MAP_PRIVATE, 4, 0) = 0x7f14fd1a5000
+31985 close(4)                          = 0
+31985 open("/usr/share/locale/locale.alias", O_RDONLY) = 4
+31985 fstat(4, {st_mode=S_IFREG|0644, st_size=2512, ...}) = 0
+31985 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f150305d000
+31985 read(4, "# Locale name alias data base.\n#"..., 4096) = 2512
+31985 read(4, "", 4096)                 = 0
+31985 close(4)                          = 0
+31985 munmap(0x7f150305d000, 4096)      = 0
+31985 open("/usr/share/locale/en_US.UTF-8/LC_MESSAGES/gcc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 open("/usr/share/locale/en_US.utf8/LC_MESSAGES/gcc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 open("/usr/share/locale/en_US/LC_MESSAGES/gcc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 open("/usr/share/locale/en.UTF-8/LC_MESSAGES/gcc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 open("/usr/share/locale/en.utf8/LC_MESSAGES/gcc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 open("/usr/share/locale/en/LC_MESSAGES/gcc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 rt_sigaction(SIGINT, {SIG_IGN, [INT], SA_RESTORER|SA_RESTART, 0x327e632960}, {SIG_DFL, [], 0}, 8) = 0
+31985 rt_sigaction(SIGINT, {0x403017, [INT], SA_RESTORER|SA_RESTART, 0x327e632960}, {SIG_IGN, [INT], SA_RESTORER|SA_RESTART, 0x327e632960}, 8) = 0
+31985 rt_sigaction(SIGHUP, {SIG_IGN, [HUP], SA_RESTORER|SA_RESTART, 0x327e632960}, {SIG_DFL, [], 0}, 8) = 0
+31985 rt_sigaction(SIGHUP, {0x403017, [HUP], SA_RESTORER|SA_RESTART, 0x327e632960}, {SIG_IGN, [HUP], SA_RESTORER|SA_RESTART, 0x327e632960}, 8) = 0
+31985 rt_sigaction(SIGTERM, {SIG_IGN, [TERM], SA_RESTORER|SA_RESTART, 0x327e632960}, {SIG_DFL, [], 0}, 8) = 0
+31985 rt_sigaction(SIGTERM, {0x403017, [TERM], SA_RESTORER|SA_RESTART, 0x327e632960}, {SIG_IGN, [TERM], SA_RESTORER|SA_RESTART, 0x327e632960}, 8) = 0
+31985 rt_sigaction(SIGPIPE, {SIG_IGN, [PIPE], SA_RESTORER|SA_RESTART, 0x327e632960}, {SIG_DFL, [], 0}, 8) = 0
+31985 rt_sigaction(SIGPIPE, {0x403017, [PIPE], SA_RESTORER|SA_RESTART, 0x327e632960}, {SIG_IGN, [PIPE], SA_RESTORER|SA_RESTART, 0x327e632960}, 8) = 0
+31985 rt_sigaction(SIGCHLD, {SIG_DFL, [CHLD], SA_RESTORER|SA_RESTART, 0x327e632960}, {SIG_DFL, [], 0}, 8) = 0
+31985 access("/usr/local/cuda/bin/g++", X_OK) = -1 ENOENT (No such file or directory)
+31985 access("/usr/lib64/qt-3.3/bin/g++", X_OK) = -1 ENOENT (No such file or directory)
+31985 access("/usr/local/bin/g++", X_OK) = -1 ENOENT (No such file or directory)
+31985 access("/bin/g++", X_OK)          = -1 ENOENT (No such file or directory)
+31985 access("/usr/bin/g++", X_OK)      = 0
+31985 lstat("/usr", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+31985 lstat("/usr/bin", {st_mode=S_IFDIR|0555, st_size=77824, ...}) = 0
+31985 lstat("/usr/bin/g++", {st_mode=S_IFREG|0755, st_size=271368, ...}) = 0
+31985 access("/usr/local/cuda/bin/g++", X_OK) = -1 ENOENT (No such file or directory)
+31985 access("/usr/lib64/qt-3.3/bin/g++", X_OK) = -1 ENOENT (No such file or directory)
+31985 access("/usr/local/bin/g++", X_OK) = -1 ENOENT (No such file or directory)
+31985 access("/bin/g++", X_OK)          = -1 ENOENT (No such file or directory)
+31985 access("/usr/bin/g++", X_OK)      = 0
+31985 lstat("/usr", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+31985 lstat("/usr/bin", {st_mode=S_IFDIR|0555, st_size=77824, ...}) = 0
+31985 lstat("/usr/bin/g++", {st_mode=S_IFREG|0755, st_size=271368, ...}) = 0
+31985 access("/usr/lib/gcc/x86_64-redhat-linux/4.4.7/", X_OK) = 0
+31985 access("/usr/lib/gcc/x86_64-redhat-linux/4.4.7/", X_OK) = 0
+31985 access("foo.c", F_OK)             = -1 ENOENT (No such file or directory)
+31985 open("/usr/share/locale/en_US.UTF-8/LC_MESSAGES/libc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 open("/usr/share/locale/en_US.utf8/LC_MESSAGES/libc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 open("/usr/share/locale/en_US/LC_MESSAGES/libc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 open("/usr/share/locale/en.UTF-8/LC_MESSAGES/libc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 open("/usr/share/locale/en.utf8/LC_MESSAGES/libc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 open("/usr/share/locale/en/LC_MESSAGES/libc.mo", O_RDONLY) = -1 ENOENT (No such file or directory)
+31985 write(2, "g++: ", 5)              = 5
+31985 write(2, "foo.c: No such file or directory", 32) = 32
+31985 write(2, "\n", 1)                 = 1
+31985 access("/usr/lib/gcc/x86_64-redhat-linux/4.4.7/specs", R_OK) = -1 ENOENT (No such file or directory)
+31985 access("/usr/lib/gcc/x86_64-redhat-linux/4.4.7/specs", R_OK) = -1 ENOENT (No such file or directory)
+31985 access("/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../x86_64-redhat-linux/lib/x86_64-redhat-linux/4.4.7/specs", R_OK) = -1 ENOENT (No such file or directory)
+31985 access("/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../x86_64-redhat-linux/lib/specs", R_OK) = -1 ENOENT (No such file or directory)
+31985 access("/usr/lib/gcc/x86_64-redhat-linux/specs", R_OK) = -1 ENOENT (No such file or directory)
+31985 access("/usr/lib/gcc/x86_64-redhat-linux/4.4.7/", X_OK) = 0
+31985 write(2, "g++: ", 5)              = 5
+31985 write(2, "no input files", 14)    = 14
+31985 write(2, "\n", 1)                 = 1
+31985 exit_group(1)                     = ?
+31983 <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 1}], 0, NULL) = 31985
+31983 --- SIGCHLD (Child exited) @ 0 (0) ---
+31983 clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff1259019d0) = 31986
+31983 wait4(31986,  <unfinished ...>
+31986 execve("/usr/local/cuda/bin/:", [":", ":", ":"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31986 execve("/usr/lib64/qt-3.3/bin/:", [":", ":", ":"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31986 execve("/usr/local/bin/:", [":", ":", ":"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31986 execve("/bin/:", [":", ":", ":"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31986 execve("/usr/bin/:", [":", ":", ":"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31986 execve("/opt/dell/srvadmin/bin/:", [":", ":", ":"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31986 execve("/usr/X11R6/bin/:", [":", ":", ":"], [/* 36 vars */]) = -1 ENOENT (No such file or directory)
+31986 exit_group(-1)                    = ?
+31983 <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 255}], 0, NULL) = 31986
+31983 --- SIGCHLD (Child exited) @ 0 (0) ---
+31983 pipe([4, 5])                      = 0
+31983 clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff1259019d0) = 31987
+31983 clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff1259019d0) = 31988
+31987 close(5 <unfinished ...>
+31983 close(4 <unfinished ...>
+31988 close(4 <unfinished ...>
+31987 <... close resumed> )             = 0
+31983 <... close resumed> )             = 0
+31988 <... close resumed> )             = 0
+31987 dup2(4, 0 <unfinished ...>
+31983 close(5 <unfinished ...>
+31988 dup2(5, 1 <unfinished ...>
+31987 <... dup2 resumed> )              = 0
+31983 <... close resumed> )             = 0
+31988 <... dup2 resumed> )              = 1
+31987 clone( <unfinished ...>
+31988 pipe( <unfinished ...>
+31983 wait4(-1,  <unfinished ...>
+31988 <... pipe resumed> [4, 6])        = 0
+31988 clone( <unfinished ...>
+31987 <... clone resumed> child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff1259019d0) = 31989
+31987 wait4(31989,  <unfinished ...>
+31988 <... clone resumed> child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff1259019d0) = 31990
+31990 close(6 <unfinished ...>
+31988 clone( <unfinished ...>
+31990 <... close resumed> )             = 0
+31990 dup2(4, 0 <unfinished ...>
+31989 execve("/usr/local/cuda/bin/sort", ["sort", "-u"], [/* 36 vars */] <unfinished ...>
+31990 <... dup2 resumed> )              = 0
+31988 <... clone resumed> child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff1259019d0) = 31991
+31990 clone( <unfinished ...>
+31988 close(4 <unfinished ...>
+31991 close(4 <unfinished ...>
+31989 <... execve resumed> )            = -1 ENOENT (No such file or directory)
+31988 <... close resumed> )             = 0
+31991 <... close resumed> )             = 0
+31988 close(6 <unfinished ...>
+31991 dup2(6, 1 <unfinished ...>
+31989 execve("/usr/lib64/qt-3.3/bin/sort", ["sort", "-u"], [/* 36 vars */] <unfinished ...>
+31988 <... close resumed> )             = 0
+31992 execve("/usr/local/cuda/bin/tr", ["tr", "a-z", "A-Z"], [/* 36 vars */] <unfinished ...>
+31991 <... dup2 resumed> )              = 1
+31990 <... clone resumed> child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff1259019d0) = 31992
+31988 wait4(-1,  <unfinished ...>
+31992 <... execve resumed> )            = -1 ENOENT (No such file or directory)
+31991 clone( <unfinished ...>
+31990 wait4(31992,  <unfinished ...>
+31989 <... execve resumed> )            = -1 ENOENT (No such file or directory)
+31992 execve("/usr/lib64/qt-3.3/bin/tr", ["tr", "a-z", "A-Z"], [/* 36 vars */] <unfinished ...>
+31989 execve("/usr/local/bin/sort", ["sort", "-u"], [/* 36 vars */] <unfinished ...>
+31992 <... execve resumed> )            = -1 ENOENT (No such file or directory)
+31991 <... clone resumed> child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7ff1259019d0) = 31993
+31993 open("/etc/passwd", O_RDONLY <unfinished ...>
+31992 execve("/usr/local/bin/tr", ["tr", "a-z", "A-Z"], [/* 36 vars */] <unfinished ...>
+31993 <... open resumed> )              = 4
+31991 wait4(31993,  <unfinished ...>
+31989 <... execve resumed> )            = -1 ENOENT (No such file or directory)
+31993 dup2(4, 0 <unfinished ...>
+31992 <... execve resumed> )            = -1 ENOENT (No such file or directory)
+31993 <... dup2 resumed> )              = 0
+31992 execve("/bin/tr", ["tr", "a-z", "A-Z"], [/* 36 vars */] <unfinished ...>
+31989 execve("/bin/sort", ["sort", "-u"], [/* 36 vars */] <unfinished ...>
+31993 close(4 <unfinished ...>
+31992 <... execve resumed> )            = -1 ENOENT (No such file or directory)
+31993 <... close resumed> )             = 0
+31992 execve("/usr/bin/tr", ["tr", "a-z", "A-Z"], [/* 36 vars */] <unfinished ...>
+31993 execve("/usr/local/cuda/bin/cat", ["cat"], [/* 36 vars */] <unfinished ...>
+31989 <... execve resumed> )            = 0
+31993 <... execve resumed> )            = -1 ENOENT (No such file or directory)
+31989 brk(0 <unfinished ...>
+31993 execve("/usr/lib64/qt-3.3/bin/cat", ["cat"], [/* 36 vars */] <unfinished ...>
+31989 <... brk resumed> )               = 0x136a000
+31993 <... execve resumed> )            = -1 ENOENT (No such file or directory)
+31992 <... execve resumed> )            = 0
+31993 execve("/usr/local/bin/cat", ["cat"], [/* 36 vars */] <unfinished ...>
+31992 brk(0 <unfinished ...>
+31989 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31993 <... execve resumed> )            = -1 ENOENT (No such file or directory)
+31992 <... brk resumed> )               = 0x246c000
+31993 execve("/bin/cat", ["cat"], [/* 36 vars */] <unfinished ...>
+31989 <... mmap resumed> )              = 0x7fce693a0000
+31992 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fe9eee1e000
+31989 access("/etc/ld.so.preload", R_OK <unfinished ...>
+31992 access("/etc/ld.so.preload", R_OK <unfinished ...>
+31989 <... access resumed> )            = -1 ENOENT (No such file or directory)
+31992 <... access resumed> )            = -1 ENOENT (No such file or directory)
+31989 open("/usr/local/cuda/lib64/tls/x86_64/librt.so.1", O_RDONLY <unfinished ...>
+31992 open("/usr/local/cuda/lib64/tls/x86_64/libc.so.6", O_RDONLY <unfinished ...>
+31989 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31992 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31989 stat("/usr/local/cuda/lib64/tls/x86_64",  <unfinished ...>
+31993 <... execve resumed> )            = 0
+31992 stat("/usr/local/cuda/lib64/tls/x86_64",  <unfinished ...>
+31989 <... stat resumed> 0x7fff8d1e98a0) = -1 ENOENT (No such file or directory)
+31993 brk(0 <unfinished ...>
+31992 <... stat resumed> 0x7fff8fad0070) = -1 ENOENT (No such file or directory)
+31989 open("/usr/local/cuda/lib64/tls/librt.so.1", O_RDONLY <unfinished ...>
+31993 <... brk resumed> )               = 0x2045000
+31992 open("/usr/local/cuda/lib64/tls/libc.so.6", O_RDONLY <unfinished ...>
+31989 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31993 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31992 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31989 stat("/usr/local/cuda/lib64/tls",  <unfinished ...>
+31993 <... mmap resumed> )              = 0x7fcb90cd2000
+31992 stat("/usr/local/cuda/lib64/tls",  <unfinished ...>
+31989 <... stat resumed> 0x7fff8d1e98a0) = -1 ENOENT (No such file or directory)
+31993 access("/etc/ld.so.preload", R_OK <unfinished ...>
+31992 <... stat resumed> 0x7fff8fad0070) = -1 ENOENT (No such file or directory)
+31989 open("/usr/local/cuda/lib64/x86_64/librt.so.1", O_RDONLY <unfinished ...>
+31993 <... access resumed> )            = -1 ENOENT (No such file or directory)
+31992 open("/usr/local/cuda/lib64/x86_64/libc.so.6", O_RDONLY <unfinished ...>
+31993 open("/usr/local/cuda/lib64/tls/x86_64/libc.so.6", O_RDONLY <unfinished ...>
+31989 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31992 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31993 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31989 stat("/usr/local/cuda/lib64/x86_64",  <unfinished ...>
+31992 stat("/usr/local/cuda/lib64/x86_64",  <unfinished ...>
+31993 stat("/usr/local/cuda/lib64/tls/x86_64",  <unfinished ...>
+31989 <... stat resumed> 0x7fff8d1e98a0) = -1 ENOENT (No such file or directory)
+31992 <... stat resumed> 0x7fff8fad0070) = -1 ENOENT (No such file or directory)
+31993 <... stat resumed> 0x7fff8470f3f0) = -1 ENOENT (No such file or directory)
+31989 open("/usr/local/cuda/lib64/librt.so.1", O_RDONLY <unfinished ...>
+31992 open("/usr/local/cuda/lib64/libc.so.6", O_RDONLY <unfinished ...>
+31993 open("/usr/local/cuda/lib64/tls/libc.so.6", O_RDONLY <unfinished ...>
+31989 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31992 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31993 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31989 stat("/usr/local/cuda/lib64",  <unfinished ...>
+31992 stat("/usr/local/cuda/lib64",  <unfinished ...>
+31993 stat("/usr/local/cuda/lib64/tls",  <unfinished ...>
+31989 <... stat resumed> {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+31993 <... stat resumed> 0x7fff8470f3f0) = -1 ENOENT (No such file or directory)
+31992 <... stat resumed> {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+31993 open("/usr/local/cuda/lib64/x86_64/libc.so.6", O_RDONLY <unfinished ...>
+31989 open("/etc/ld.so.cache", O_RDONLY <unfinished ...>
+31993 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31992 open("/etc/ld.so.cache", O_RDONLY <unfinished ...>
+31993 stat("/usr/local/cuda/lib64/x86_64",  <unfinished ...>
+31989 <... open resumed> )              = 5
+31993 <... stat resumed> 0x7fff8470f3f0) = -1 ENOENT (No such file or directory)
+31992 <... open resumed> )              = 6
+31989 fstat(5,  <unfinished ...>
+31993 open("/usr/local/cuda/lib64/libc.so.6", O_RDONLY <unfinished ...>
+31992 fstat(6,  <unfinished ...>
+31993 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31992 <... fstat resumed> {st_mode=S_IFREG|0644, st_size=151109, ...}) = 0
+31989 <... fstat resumed> {st_mode=S_IFREG|0644, st_size=151109, ...}) = 0
+31993 stat("/usr/local/cuda/lib64",  <unfinished ...>
+31992 mmap(NULL, 151109, PROT_READ, MAP_PRIVATE, 6, 0 <unfinished ...>
+31989 mmap(NULL, 151109, PROT_READ, MAP_PRIVATE, 5, 0 <unfinished ...>
+31993 <... stat resumed> {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+31992 <... mmap resumed> )              = 0x7fe9eedf9000
+31993 open("/etc/ld.so.cache", O_RDONLY <unfinished ...>
+31989 <... mmap resumed> )              = 0x7fce6937b000
+31992 close(6 <unfinished ...>
+31993 <... open resumed> )              = 4
+31989 close(5 <unfinished ...>
+31992 <... close resumed> )             = 0
+31993 fstat(4,  <unfinished ...>
+31989 <... close resumed> )             = 0
+31993 <... fstat resumed> {st_mode=S_IFREG|0644, st_size=151109, ...}) = 0
+31992 open("/lib64/libc.so.6", O_RDONLY <unfinished ...>
+31993 mmap(NULL, 151109, PROT_READ, MAP_PRIVATE, 4, 0 <unfinished ...>
+31989 open("/lib64/librt.so.1", O_RDONLY <unfinished ...>
+31993 <... mmap resumed> )              = 0x7fcb90cad000
+31992 <... open resumed> )              = 6
+31993 close(4 <unfinished ...>
+31989 <... open resumed> )              = 5
+31992 read(6,  <unfinished ...>
+31993 <... close resumed> )             = 0
+31989 read(5,  <unfinished ...>
+31992 <... read resumed> "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\360\355a~2\0\0\0"..., 832) = 832
+31993 open("/lib64/libc.so.6", O_RDONLY <unfinished ...>
+31989 <... read resumed> "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0@!`\1772\0\0\0"..., 832) = 832
+31993 <... open resumed> )              = 4
+31992 fstat(6,  <unfinished ...>
+31993 read(4,  <unfinished ...>
+31989 fstat(5,  <unfinished ...>
+31993 <... read resumed> "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\360\355a~2\0\0\0"..., 832) = 832
+31992 <... fstat resumed> {st_mode=S_IFREG|0755, st_size=1922152, ...}) = 0
+31993 fstat(4,  <unfinished ...>
+31989 <... fstat resumed> {st_mode=S_IFREG|0755, st_size=47064, ...}) = 0
+31993 <... fstat resumed> {st_mode=S_IFREG|0755, st_size=1922152, ...}) = 0
+31992 mmap(0x327e600000, 3745960, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 6, 0 <unfinished ...>
+31993 mmap(0x327e600000, 3745960, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 4, 0 <unfinished ...>
+31989 mmap(0x327f600000, 2128816, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 5, 0 <unfinished ...>
+31993 <... mmap resumed> )              = 0x327e600000
+31992 <... mmap resumed> )              = 0x327e600000
+31993 mprotect(0x327e78a000, 2093056, PROT_NONE <unfinished ...>
+31989 <... mmap resumed> )              = 0x327f600000
+31992 mprotect(0x327e78a000, 2093056, PROT_NONE <unfinished ...>
+31993 <... mprotect resumed> )          = 0
+31989 mprotect(0x327f607000, 2093056, PROT_NONE <unfinished ...>
+31993 mmap(0x327e989000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4, 0x189000 <unfinished ...>
+31992 <... mprotect resumed> )          = 0
+31989 <... mprotect resumed> )          = 0
+31993 <... mmap resumed> )              = 0x327e989000
+31992 mmap(0x327e989000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 6, 0x189000 <unfinished ...>
+31989 mmap(0x327f806000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 5, 0x6000 <unfinished ...>
+31993 mmap(0x327e98e000, 18600, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31992 <... mmap resumed> )              = 0x327e989000
+31993 <... mmap resumed> )              = 0x327e98e000
+31989 <... mmap resumed> )              = 0x327f806000
+31993 close(4 <unfinished ...>
+31992 mmap(0x327e98e000, 18600, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31993 <... close resumed> )             = 0
+31989 close(5 <unfinished ...>
+31992 <... mmap resumed> )              = 0x327e98e000
+31993 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31989 <... close resumed> )             = 0
+31993 <... mmap resumed> )              = 0x7fcb90cac000
+31992 close(6 <unfinished ...>
+31989 open("/usr/local/cuda/lib64/libc.so.6", O_RDONLY <unfinished ...>
+31993 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31992 <... close resumed> )             = 0
+31993 <... mmap resumed> )              = 0x7fcb90cab000
+31989 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31993 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31992 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31993 <... mmap resumed> )              = 0x7fcb90caa000
+31989 open("/lib64/libc.so.6", O_RDONLY <unfinished ...>
+31993 arch_prctl(ARCH_SET_FS, 0x7fcb90cab700 <unfinished ...>
+31992 <... mmap resumed> )              = 0x7fe9eedf8000
+31993 <... arch_prctl resumed> )        = 0
+31989 <... open resumed> )              = 5
+31992 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31989 read(5,  <unfinished ...>
+31993 mprotect(0x327e989000, 16384, PROT_READ <unfinished ...>
+31992 <... mmap resumed> )              = 0x7fe9eedf7000
+31993 <... mprotect resumed> )          = 0
+31989 <... read resumed> "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\360\355a~2\0\0\0"..., 832) = 832
+31993 mprotect(0x327e01f000, 4096, PROT_READ <unfinished ...>
+31992 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31993 <... mprotect resumed> )          = 0
+31989 fstat(5,  <unfinished ...>
+31993 munmap(0x7fcb90cad000, 151109 <unfinished ...>
+31992 <... mmap resumed> )              = 0x7fe9eedf6000
+31989 <... fstat resumed> {st_mode=S_IFREG|0755, st_size=1922152, ...}) = 0
+31993 <... munmap resumed> )            = 0
+31992 arch_prctl(ARCH_SET_FS, 0x7fe9eedf7700 <unfinished ...>
+31989 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31992 <... arch_prctl resumed> )        = 0
+31989 <... mmap resumed> )              = 0x7fce6937a000
+31989 mmap(0x327e600000, 3745960, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 5, 0 <unfinished ...>
+31992 mprotect(0x327e989000, 16384, PROT_READ <unfinished ...>
+31989 <... mmap resumed> )              = 0x327e600000
+31992 <... mprotect resumed> )          = 0
+31989 mprotect(0x327e78a000, 2093056, PROT_NONE <unfinished ...>
+31992 mprotect(0x327e01f000, 4096, PROT_READ <unfinished ...>
+31989 <... mprotect resumed> )          = 0
+31993 brk(0 <unfinished ...>
+31992 <... mprotect resumed> )          = 0
+31989 mmap(0x327e989000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 5, 0x189000 <unfinished ...>
+31993 <... brk resumed> )               = 0x2045000
+31992 munmap(0x7fe9eedf9000, 151109 <unfinished ...>
+31993 brk(0x2066000 <unfinished ...>
+31989 <... mmap resumed> )              = 0x327e989000
+31993 <... brk resumed> )               = 0x2066000
+31992 <... munmap resumed> )            = 0
+31989 mmap(0x327e98e000, 18600, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31993 open("/usr/lib/locale/locale-archive", O_RDONLY <unfinished ...>
+31989 <... mmap resumed> )              = 0x327e98e000
+31993 <... open resumed> )              = 4
+31989 close(5 <unfinished ...>
+31993 fstat(4,  <unfinished ...>
+31989 <... close resumed> )             = 0
+31993 <... fstat resumed> {st_mode=S_IFREG|0644, st_size=99158576, ...}) = 0
+31989 open("/usr/local/cuda/lib64/libpthread.so.0", O_RDONLY <unfinished ...>
+31993 mmap(NULL, 99158576, PROT_READ, MAP_PRIVATE, 4, 0 <unfinished ...>
+31992 brk(0 <unfinished ...>
+31993 <... mmap resumed> )              = 0x7fcb8ae19000
+31989 <... open resumed> )              = -1 ENOENT (No such file or directory)
+31993 close(4 <unfinished ...>
+31992 <... brk resumed> )               = 0x246c000
+31993 <... close resumed> )             = 0
+31989 open("/lib64/libpthread.so.0", O_RDONLY <unfinished ...>
+31992 brk(0x248d000 <unfinished ...>
+31989 <... open resumed> )              = 5
+31993 fstat(1,  <unfinished ...>
+31992 <... brk resumed> )               = 0x248d000
+31989 read(5,  <unfinished ...>
+31993 <... fstat resumed> {st_mode=S_IFIFO|0600, st_size=0, ...}) = 0
+31992 open("/usr/lib/locale/locale-archive", O_RDONLY <unfinished ...>
+31989 <... read resumed> "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0`\\\340~2\0\0\0"..., 832) = 832
+31993 fstat(0,  <unfinished ...>
+31992 <... open resumed> )              = 6
+31993 <... fstat resumed> {st_mode=S_IFREG|0644, st_size=2202, ...}) = 0
+31989 fstat(5,  <unfinished ...>
+31992 fstat(6,  <unfinished ...>
+31993 read(0,  <unfinished ...>
+31989 <... fstat resumed> {st_mode=S_IFREG|0755, st_size=145720, ...}) = 0
+31993 <... read resumed> "root:x:0:0:root:/root:/bin/bash\n"..., 32768) = 2202
+31992 <... fstat resumed> {st_mode=S_IFREG|0644, st_size=99158576, ...}) = 0
+31993 write(1, "root:x:0:0:root:/root:/bin/bash\n"..., 2202 <unfinished ...>
+31989 mmap(0x327ee00000, 2212768, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 5, 0 <unfinished ...>
+31993 <... write resumed> )             = 2202
+31992 mmap(NULL, 99158576, PROT_READ, MAP_PRIVATE, 6, 0 <unfinished ...>
+31993 read(0,  <unfinished ...>
+31989 <... mmap resumed> )              = 0x327ee00000
+31993 <... read resumed> "", 32768)     = 0
+31992 <... mmap resumed> )              = 0x7fe9e8f65000
+31989 mprotect(0x327ee17000, 2097152, PROT_NONE <unfinished ...>
+31993 close(0 <unfinished ...>
+31992 close(6 <unfinished ...>
+31993 <... close resumed> )             = 0
+31989 <... mprotect resumed> )          = 0
+31992 <... close resumed> )             = 0
+31993 close(1 <unfinished ...>
+31989 mmap(0x327f017000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 5, 0x17000 <unfinished ...>
+31993 <... close resumed> )             = 0
+31989 <... mmap resumed> )              = 0x327f017000
+31993 close(2 <unfinished ...>
+31992 read(0,  <unfinished ...>
+31993 <... close resumed> )             = 0
+31989 mmap(0x327f019000, 13216, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31993 exit_group(0)                     = ?
+31992 <... read resumed> "root:x:0:0:root:/root:/bin/bash\n"..., 8192) = 2202
+31989 <... mmap resumed> )              = 0x327f019000
+31992 fstat(1,  <unfinished ...>
+31989 close(5 <unfinished ...>
+31992 <... fstat resumed> {st_mode=S_IFIFO|0600, st_size=0, ...}) = 0
+31991 <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 31993
+31989 <... close resumed> )             = 0
+31992 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31991 --- SIGCHLD (Child exited) @ 0 (0) ---
+31992 <... mmap resumed> )              = 0x7fe9eee1d000
+31989 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31992 read(0,  <unfinished ...>
+31991 close(6 <unfinished ...>
+31989 <... mmap resumed> )              = 0x7fce69379000
+31991 <... close resumed> )             = 0
+31989 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fce69378000
+31989 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
+31991 exit_group(0)                     = ?
+31989 <... mmap resumed> )              = 0x7fce69377000
+31989 arch_prctl(ARCH_SET_FS, 0x7fce69378700) = 0
+31992 <... read resumed> "", 8192)      = 0
+31989 mprotect(0x327f806000, 4096, PROT_READ <unfinished ...>
+31988 <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 31991
+31992 close(0 <unfinished ...>
+31989 <... mprotect resumed> )          = 0
+31992 <... close resumed> )             = 0
+31988 --- SIGCHLD (Child exited) @ 0 (0) ---
+31989 mprotect(0x327e989000, 16384, PROT_READ <unfinished ...>
+31992 write(1, "ROOT:X:0:0:ROOT:/ROOT:/BIN/BASH\n"..., 2202 <unfinished ...>
+31988 wait4(31990,  <unfinished ...>
+31992 <... write resumed> )             = 2202
+31989 <... mprotect resumed> )          = 0
+31992 close(1 <unfinished ...>
+31989 mprotect(0x327f017000, 4096, PROT_READ <unfinished ...>
+31992 <... close resumed> )             = 0
+31989 <... mprotect resumed> )          = 0
+31992 munmap(0x7fe9eee1d000, 4096 <unfinished ...>
+31989 mprotect(0x327e01f000, 4096, PROT_READ <unfinished ...>
+31992 <... munmap resumed> )            = 0
+31989 <... mprotect resumed> )          = 0
+31992 close(2 <unfinished ...>
+31989 munmap(0x7fce6937b000, 151109 <unfinished ...>
+31992 <... close resumed> )             = 0
+31989 <... munmap resumed> )            = 0
+31992 exit_group(0)                     = ?
+31989 set_tid_address(0x7fce693789d0)   = 31989
+31989 set_robust_list(0x7fce693789e0, 0x18) = 0
+31989 futex(0x7fff8d1ea1ac, FUTEX_WAKE_PRIVATE, 1 <unfinished ...>
+31990 <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 31992
+31989 <... futex resumed> )             = 0
+31990 --- SIGCHLD (Child exited) @ 0 (0) ---
+31989 futex(0x7fff8d1ea1ac, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 1, NULL, 7fce69378700 <unfinished ...>
+31990 close(4 <unfinished ...>
+31989 <... futex resumed> )             = -1 EAGAIN (Resource temporarily unavailable)
+31990 <... close resumed> )             = 0
+31989 rt_sigaction(SIGRTMIN, {0x327ee05ae0, [], SA_RESTORER|SA_SIGINFO, 0x327ee0f500}, NULL, 8) = 0
+31990 exit_group(0)                     = ?
+31989 rt_sigaction(SIGRT_1, {0x327ee05b70, [], SA_RESTORER|SA_RESTART|SA_SIGINFO, 0x327ee0f500}, NULL, 8) = 0
+31989 rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1],  <unfinished ...>
+31988 <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 31990
+31989 <... rt_sigprocmask resumed> NULL, 8) = 0
+31988 --- SIGCHLD (Child exited) @ 0 (0) ---
+31989 getrlimit(RLIMIT_STACK,  <unfinished ...>
+31988 close(5 <unfinished ...>
+31989 <... getrlimit resumed> {rlim_cur=10240*1024, rlim_max=RLIM_INFINITY}) = 0
+31988 <... close resumed> )             = 0
+31988 exit_group(0)                     = ?
+31989 brk(0 <unfinished ...>
+31983 <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 31988
+31989 <... brk resumed> )               = 0x136a000
+31983 --- SIGCHLD (Child exited) @ 0 (0) ---
+31989 brk(0x138b000 <unfinished ...>
+31983 wait4(31987,  <unfinished ...>
+31989 <... brk resumed> )               = 0x138b000
+31989 open("/usr/lib/locale/locale-archive", O_RDONLY) = 5
+31989 fstat(5, {st_mode=S_IFREG|0644, st_size=99158576, ...}) = 0
+31989 mmap(NULL, 99158576, PROT_READ, MAP_PRIVATE, 5, 0) = 0x7fce634e6000
+31989 close(5)                          = 0
+31989 open("/usr/lib64/gconv/gconv-modules.cache", O_RDONLY) = 5
+31989 fstat(5, {st_mode=S_IFREG|0644, st_size=26060, ...}) = 0
+31989 mmap(NULL, 26060, PROT_READ, MAP_SHARED, 5, 0) = 0x7fce69399000
+31989 close(5)                          = 0
+31989 futex(0x327e98df60, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+31989 rt_sigaction(SIGALRM, NULL, {SIG_DFL, [], 0}, 8) = 0
+31989 rt_sigaction(SIGHUP, NULL, {SIG_DFL, [], 0}, 8) = 0
+31989 rt_sigaction(SIGINT, NULL, {SIG_DFL, [], 0}, 8) = 0
+31989 rt_sigaction(SIGPIPE, NULL, {SIG_DFL, [], 0}, 8) = 0
+31989 rt_sigaction(SIGQUIT, NULL, {SIG_DFL, [], 0}, 8) = 0
+31989 rt_sigaction(SIGTERM, NULL, {SIG_DFL, [], 0}, 8) = 0
+31989 rt_sigaction(SIGIO, NULL, {SIG_DFL, [], 0}, 8) = 0
+31989 rt_sigaction(SIGPROF, NULL, {SIG_DFL, [], 0}, 8) = 0
+31989 rt_sigaction(SIGVTALRM, NULL, {SIG_DFL, [], 0}, 8) = 0
+31989 rt_sigaction(SIGXCPU, NULL, {SIG_DFL, [], 0}, 8) = 0
+31989 rt_sigaction(SIGXFSZ, NULL, {SIG_DFL, [], 0}, 8) = 0
+31989 rt_sigaction(SIGALRM, {0x4039f0, [HUP INT QUIT PIPE ALRM TERM XCPU XFSZ VTALRM PROF IO], SA_RESTORER, 0x327e632960}, NULL, 8) = 0
+31989 rt_sigaction(SIGHUP, {0x4039f0, [HUP INT QUIT PIPE ALRM TERM XCPU XFSZ VTALRM PROF IO], SA_RESTORER, 0x327e632960}, NULL, 8) = 0
+31989 rt_sigaction(SIGINT, {0x4039f0, [HUP INT QUIT PIPE ALRM TERM XCPU XFSZ VTALRM PROF IO], SA_RESTORER, 0x327e632960}, NULL, 8) = 0
+31989 rt_sigaction(SIGPIPE, {0x4039f0, [HUP INT QUIT PIPE ALRM TERM XCPU XFSZ VTALRM PROF IO], SA_RESTORER, 0x327e632960}, NULL, 8) = 0
+31989 rt_sigaction(SIGQUIT, {0x4039f0, [HUP INT QUIT PIPE ALRM TERM XCPU XFSZ VTALRM PROF IO], SA_RESTORER, 0x327e632960}, NULL, 8) = 0
+31989 rt_sigaction(SIGTERM, {0x4039f0, [HUP INT QUIT PIPE ALRM TERM XCPU XFSZ VTALRM PROF IO], SA_RESTORER, 0x327e632960}, NULL, 8) = 0
+31989 rt_sigaction(SIGIO, {0x4039f0, [HUP INT QUIT PIPE ALRM TERM XCPU XFSZ VTALRM PROF IO], SA_RESTORER, 0x327e632960}, NULL, 8) = 0
+31989 rt_sigaction(SIGPROF, {0x4039f0, [HUP INT QUIT PIPE ALRM TERM XCPU XFSZ VTALRM PROF IO], SA_RESTORER, 0x327e632960}, NULL, 8) = 0
+31989 rt_sigaction(SIGVTALRM, {0x4039f0, [HUP INT QUIT PIPE ALRM TERM XCPU XFSZ VTALRM PROF IO], SA_RESTORER, 0x327e632960}, NULL, 8) = 0
+31989 rt_sigaction(SIGXCPU, {0x4039f0, [HUP INT QUIT PIPE ALRM TERM XCPU XFSZ VTALRM PROF IO], SA_RESTORER, 0x327e632960}, NULL, 8) = 0
+31989 rt_sigaction(SIGXFSZ, {0x4039f0, [HUP INT QUIT PIPE ALRM TERM XCPU XFSZ VTALRM PROF IO], SA_RESTORER, 0x327e632960}, NULL, 8) = 0
+31989 rt_sigaction(SIGCHLD, {SIG_DFL, [CHLD], SA_RESTORER|SA_RESTART, 0x327e632960}, {SIG_DFL, [], 0}, 8) = 0
+31989 fstat(0, {st_mode=S_IFIFO|0600, st_size=0, ...}) = 0
+31989 open("/proc/meminfo", O_RDONLY)   = 5
+31989 fstat(5, {st_mode=S_IFREG|0444, st_size=0, ...}) = 0
+31989 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fce69398000
+31989 read(5, "MemTotal:       32865796 kB\nMemF"..., 1024) = 1024
+31989 close(5)                          = 0
+31989 munmap(0x7fce69398000, 4096)      = 0
+31989 open("/proc/meminfo", O_RDONLY)   = 5
+31989 fstat(5, {st_mode=S_IFREG|0444, st_size=0, ...}) = 0
+31989 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fce69398000
+31989 read(5, "MemTotal:       32865796 kB\nMemF"..., 1024) = 1024
+31989 close(5)                          = 0
+31989 munmap(0x7fce69398000, 4096)      = 0
+31989 getrlimit(RLIMIT_DATA, {rlim_cur=RLIM_INFINITY, rlim_max=RLIM_INFINITY}) = 0
+31989 getrlimit(RLIMIT_AS, {rlim_cur=10000000*1024, rlim_max=10000000*1024}) = 0
+31989 getrlimit(RLIMIT_RSS, {rlim_cur=RLIM_INFINITY, rlim_max=RLIM_INFINITY}) = 0
+31989 mmap(NULL, 51384320, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fce603e5000
+31989 fstat(0, {st_mode=S_IFIFO|0600, st_size=0, ...}) = 0
+31989 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fce603e4000
+31989 read(0, "ROOT:X:0:0:ROOT:/ROOT:/BIN/BASH\n"..., 1048576) = 2202
+31989 read(0, "", 1044480)              = 0
+31989 fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 4), ...}) = 0
+31989 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fce603e3000
+31989 write(1, "ABRT:X:173:173::/ETC/ABRT:/SBIN/"..., 40) = 40
+31989 write(1, "ADM:X:3:4:ADM:/VAR/ADM:/SBIN/NOL"..., 37) = 37
+31989 write(1, "APACHE:X:48:48:APACHE:/VAR/WWW:/"..., 45) = 45
+31989 write(1, "AVAHI-AUTOIPD:X:170:170:AVAHI IP"..., 80) = 80
+31989 write(1, "AVAHI:X:70:70:AVAHI MDNS/DNS-SD "..., 74) = 74
+31989 write(1, "BIN:X:1:1:BIN:/BIN:/SBIN/NOLOGIN"..., 33) = 33
+31989 write(1, "DAEMON:X:2:2:DAEMON:/SBIN:/SBIN/"..., 40) = 40
+31989 write(1, "DBUS:X:81:81:SYSTEM MESSAGE BUS:"..., 48) = 48
+31989 write(1, "FTP:X:14:50:FTP USER:/VAR/FTP:/S"..., 44) = 44
+31989 write(1, "GAMES:X:12:100:GAMES:/USR/GAMES:"..., 46) = 46
+31989 write(1, "GDM:X:42:42::/VAR/LIB/GDM:/SBIN/"..., 40) = 40
+31989 write(1, "GOPHER:X:13:30:GOPHER:/VAR/GOPHE"..., 48) = 48
+31989 write(1, "HALDAEMON:X:68:68:HAL DAEMON:/:/"..., 45) = 45
+31989 write(1, "HALT:X:7:0:HALT:/SBIN:/SBIN/HALT"..., 33) = 33
+31989 write(1, "HSQLDB:X:96:96::/VAR/LIB/HSQLDB:"..., 46) = 46
+31989 write(1, "LP:X:4:7:LP:/VAR/SPOOL/LPD:/SBIN"..., 41) = 41
+31989 write(1, "MAILNULL:X:47:47::/VAR/SPOOL/MQU"..., 50) = 50
+31989 write(1, "MAIL:X:8:12:MAIL:/VAR/SPOOL/MAIL"..., 47) = 47
+31989 write(1, "MYSQL:X:27:27:MYSQL SERVER:/VAR/"..., 52) = 52
+31989 write(1, "NFSNOBODY:X:65534:65534:ANONYMOU"..., 70) = 70
+31989 write(1, "NOBODY:X:99:99:NOBODY:/:/SBIN/NO"..., 38) = 38
+31989 write(1, "NTP:X:38:38::/ETC/NTP:/SBIN/NOLO"..., 36) = 36
+31989 write(1, "OPERATOR:X:11:0:OPERATOR:/ROOT:/"..., 45) = 45
+31989 write(1, "OPROFILE:X:16:16:SPECIAL USER AC"..., 90) = 90
+31989 write(1, "POSTFIX:X:89:89::/VAR/SPOOL/POST"..., 50) = 50
+31989 write(1, "PULSE:X:201:433:PULSEAUDIO SYSTE"..., 70) = 70
+31989 write(1, "QPIDD:X:498:499:OWNER OF QPIDD D"..., 68) = 68
+31989 write(1, "ROOT:X:0:0:ROOT:/ROOT:/BIN/BASH\n", 32) = 32
+31989 write(1, "RPCUSER:X:29:29:RPC SERVICE USER"..., 60) = 60
+31989 write(1, "RPC:X:32:32:RPCBIND DAEMON:/VAR/"..., 60) = 60
+31989 write(1, "RTKIT:X:202:465:REALTIMEKIT:/PRO"..., 48) = 48
+31989 write(1, "SASLAUTH:X:499:76:\"SASLAUTHD USE"..., 69) = 69
+31989 write(1, "SHUTDOWN:X:6:0:SHUTDOWN:/SBIN:/S"..., 45) = 45
+31989 write(1, "SMMSP:X:51:51::/VAR/SPOOL/MQUEUE"..., 47) = 47
+31989 write(1, "SSHD:X:74:74:PRIVILEGE-SEPARATED"..., 67) = 67
+31989 write(1, "STAP-SERVER:X:155:155:SYSTEMTAP "..., 82) = 82
+31989 write(1, "SYNC:X:5:0:SYNC:/SBIN:/BIN/SYNC\n", 32) = 32
+31989 write(1, "TCPDUMP:X:72:72::/:/SBIN/NOLOGIN"..., 33) = 33
+31989 write(1, "TOMCAT:X:91:91:APACHE TOMCAT:/US"..., 62) = 62
+31989 write(1, "TSS:X:59:59:ACCOUNT USED BY THE "..., 100) = 100
+31989 write(1, "UUCP:X:10:14:UUCP:/VAR/SPOOL/UUC"..., 48) = 48
+31989 write(1, "VCSA:X:69:69:VIRTUAL CONSOLE MEM"..., 61) = 61
+31989 munmap(0x7fce603e5000, 51384320)  = 0
+31989 close(0)                          = 0
+31989 munmap(0x7fce603e4000, 4096)      = 0
+31989 close(1)                          = 0
+31989 munmap(0x7fce603e3000, 4096)      = 0
+31989 close(2)                          = 0
+31989 exit_group(0)                     = ?
+31987 <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 31989
+31987 --- SIGCHLD (Child exited) @ 0 (0) ---
+31987 close(4)                          = 0
+31987 exit_group(0)                     = ?
+31983 <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 31987
+31983 --- SIGCHLD (Child exited) @ 0 (0) ---
+31983 fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 4), ...}) = 0
+31983 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7ff125917000
+31983 write(1, "Freeing 0\n", 10)       = 10
+31983 write(1, "Freeing\n", 8)          = 8
+31983 exit_group(0)                     = ?

@@ -876,8 +876,9 @@ struct command_stream
 command_t
 read_command_stream (command_stream_t s)
 {
-  //printf("Stream First %d\n", (*(s->next))->theCommand->type);
-
+  //printf("Stream First %d\n", (*(s->first))->theCommand->type);
+  //if(s->next != NULL)
+    //printf("Stream Next %d\n", (*(s->next))->theCommand->type);
   if(*(s->next) != NULL)
   {
     command_node_t stream = *(s->next);
@@ -893,9 +894,10 @@ read_command_stream (command_stream_t s)
     {
       command_node_t del = temp;
       temp = temp->next;
-      //printf("Freeing %d\n", del->theCommand->type);
-      free(del->theCommand);
-      free(del);
+      printf("Freeing %d\n", del->theCommand->type);
+      //free(del->theCommand);
+      printf("Freeing\n");
+      //free(del);
     }
   }
   return NULL;

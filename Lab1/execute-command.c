@@ -5,6 +5,7 @@
 #include "alloc.h"
 
 #include <error.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -83,7 +84,70 @@ execute_simple_command (command_t c)
 }
 
 void
-execute_and_command (command_t c) {
+execute_pipe_command (command_t c)
+{
+  int pipefd[2];
+  pipe(pipefd);
+  pid_t child = fork();
+
+  //printf("Child: %d\n", child);
+
+  //child
+  if(child == 0)
+  {
+    close(pipefd[1]);
+    int dup = dup2(pipefd[0],0);
+    if(dup == -1)
+      //printf("error dup==-1\n");
+      error(1, errno, "file error");
+    execute_command(c->u.command[1],0);
+    close(pipefd[0]);
+    exit(c->u.command[1]->status);
+  }
+  //parent
+  else if(child > 0)
+  {
+    pid_t child2 = fork();
+    if(child2 == 0)
+    {
+      close(pipefd[0]);
+      int dup = dup2(pipefd[1],1);
+      if(dup == -1)
+        //printf("error dup==-1\n");
+        error(1, errno, "file error");
+      execute_command(c->u.command[0],0);
+      close(pipefd[1]);
+      exit(c->u.command[0]->status);
+    }
+    else if(child2 > 0)
+    {
+      close(pipefd[0]);
+      close(pipefd[1]);
+      int status;
+      pid_t wait_pid = waitpid(-1, &status,0);
+      if(wait_pid == child)
+      {
+        c->status = status;
+        waitpid(child2,&status,0);
+        return;
+      }
+      else if(wait_pid == child2)
+      {
+        waitpid(child,&status,0);
+        c->status = status;
+        return;
+      }
+    }
+    else
+      error(1,0,"Child process error");
+  }
+  else
+    error(1, errno, "forking error");
+}
+
+void
+execute_and_command (command_t c) 
+{
   execute_command(c->u.command[0], 0);
 
   if (c->u.command[0]->status == 0) {
@@ -147,9 +211,9 @@ execute_command (command_t c, int time_travel)
         case OR_COMMAND:
           execute_or_command(c);
           break;
-        /*case PIPE_COMMAND:
+        case PIPE_COMMAND:
           execute_pipe_command(c);
-          break;*/
+          break;
         case SEQUENCE_COMMAND:
           execute_sequence_command(c);
           break;
