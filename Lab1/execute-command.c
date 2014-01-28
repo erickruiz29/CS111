@@ -150,7 +150,7 @@ execute_and_command (command_t c)
 {
   execute_command(c->u.command[0], 0);
 
-  if (c->u.command[0]->status == 0) {
+  if (command_status(c) == 0) {
       // run the second command
       execute_command(c->u.command[1], 0);
       // set the status of the AND command
@@ -168,12 +168,13 @@ execute_or_command (command_t c) {
   execute_command(c->u.command[0], 0);
   //puts("TESTOR");
 
-  if (c->u.command[0]->status == 0) {
+  if (command_status(c) == 0) {
       c->status = c->u.command[0]->status;
   }
   else {
       execute_command(c->u.command[1], 0);
       c->status = c->u.command[1]->status;
+      //printf("%d\n", c->type);
   }
 }
 
@@ -198,6 +199,9 @@ execute_command (command_t c, int time_travel)
   /* FIXME: Replace this with your implementation.  You may need to
      add auxiliary functions and otherwise modify the source code.
      You can also use external functions defined in the GNU C Library.  */
+     if(c == NULL)
+      return;
+    //printf("Enter%d\n", c->type);
      if (!time_travel) 
      {
       switch(c->type)
@@ -224,9 +228,9 @@ execute_command (command_t c, int time_travel)
           error(1, 0, "Incorrect Command Type");
       }
      }
-
+     //printf("Exit%d\n", c->type);
      //filler for compilation
-     command_t a = c;
+     //command_t a = c;
      int b = time_travel;
      //error (1, 0, "command execution not yet implemented");
 }

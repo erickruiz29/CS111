@@ -32,7 +32,7 @@ struct command_node
 struct command_stream
 {
   command_node_t* commands;
-  command_node_t* first;
+  command_node_t first;
   command_node_t* next;
 };
 
@@ -767,6 +767,7 @@ create_node(char *word_buf, enum command_type type)
 {
   command_node_t node = checked_malloc(sizeof(struct command_node));
   node->next = NULL;
+  node->prev = NULL;
   node->theCommand = create_command(word_buf,type);
   return node;
 }
@@ -809,7 +810,7 @@ make_command_stream (int (*get_next_byte) (void *),
   }
   
   command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
-  new_stream->first = NULL;
+  //new_stream->first;
   new_stream->next = NULL;
 
   //grab command_type
@@ -835,7 +836,7 @@ make_command_stream (int (*get_next_byte) (void *),
     new_stream->commands = &head;
     if(new_stream->first == NULL)
     {
-      new_stream->first = &head;
+      new_stream->first = head;
       new_stream->next = &head;
     }
     //return new_stream;
@@ -889,15 +890,15 @@ read_command_stream (command_stream_t s)
   //end of stream, clean up
   else
   {
-    command_node_t temp = *(s->first);
+    command_node_t temp = s->first;
     while(temp != NULL)
     {
       command_node_t del = temp;
       temp = temp->next;
-      printf("Freeing %d\n", del->theCommand->type);
-      //free(del->theCommand);
-      printf("Freeing\n");
-      //free(del);
+      //printf("Freeing %d\n", del->theCommand->type);
+      free(del->theCommand);
+      //printf("Freeing\n");
+      free(del);
     }
   }
   return NULL;
