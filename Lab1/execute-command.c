@@ -48,9 +48,9 @@ execute_simple_command (command_t c)
     {
       // cmd < file
       if ((fd_in = open(c->input, O_RDONLY, 0666)) == -1)
-        error(1, 0, "cannot open input file!");
+        error(1, errno, "cannot open input file!");
       if (dup2(fd_in, STDIN_FILENO) == -1)
-        error(1, 0, "cannot do input redirect");
+        error(1, errno, "cannot do input redirect");
       close(fd_in);
     }
     if (c->output != NULL) 
@@ -58,13 +58,18 @@ execute_simple_command (command_t c)
       // cmd > file
       //puts(c->output);
       if ((fd_out = open(c->output, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IRGRP|S_IWGRP|S_IWUSR)) == -1)
-        error(1, 0, "cannot open output file!");
+        error(1, errno, "cannot open output file!");
       if (dup2(fd_out, STDOUT_FILENO) == -1)
-        error(1, 0, "cannot do output redirect");
+        error(1, errno, "cannot do output redirect");
       close(fd_out);
     }
     // handle execution
-    execvp(c->u.word[0], c->u.word); // one function that executes command
+    if(execvp(c->u.word[0], c->u.word) == -1) // one function that executes command
+    {
+      //printf("%d",errno);
+      if(c->u.word[0][0] != ':') //skip this example
+        error(1,errno,c->u.word[0]);
+    }
     exit(c->status);
     //error(1, 0, "can't execute command!");
   }
@@ -74,7 +79,7 @@ execute_simple_command (command_t c)
     int status;
     // wait for the child process
     if ( (waitpid(child, &status, 0)) == -1)
-      error(1, 0, "Child process error");
+      error(1, errno, "Child process error");
     // harvest the execution status
     c->status = status;
   }
@@ -139,7 +144,7 @@ execute_pipe_command (command_t c)
       }
     }
     else
-      error(1,0,"Child process error");
+      error(1,errno,"Child process error");
   }
   else
     error(1, errno, "forking error");
