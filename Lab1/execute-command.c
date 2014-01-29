@@ -185,6 +185,12 @@ execute_sequence_command(command_t c) {
   c->status = c->u.command[1]->status;
 }
 
+void
+execute_subshell_command(command_t c) {
+  execute_command(c->u.subshell_command, 0);
+  c->status = c->u.subshell_command->status;
+}
+
 
 
 int
@@ -221,9 +227,9 @@ execute_command (command_t c, int time_travel)
         case SEQUENCE_COMMAND:
           execute_sequence_command(c);
           break;
-        /*case SUBSHELL_COMMAND:
+        case SUBSHELL_COMMAND:
           execute_subshell_command(c);
-          break;*/
+          break;
         default:
           error(1, 0, "Incorrect Command Type");
       }
