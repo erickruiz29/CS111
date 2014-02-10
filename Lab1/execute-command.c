@@ -18,9 +18,6 @@
 #include <unistd.h>
 
 
-/* FIXME: You may need to add #include directives, macro definitions,
-   static function definitions, etc.  */
-
 /*enum file_type
 {
 	READ_FILE,
@@ -40,11 +37,11 @@ void
 execute_simple_command (command_t c)
 {
   pid_t child = fork();
-  if (child == 0) 
+  if (child == 0)
   {
     int fd_in;
     int fd_out;
-    if (c->input != NULL) 
+    if (c->input != NULL)
     {
       // cmd < file
       if ((fd_in = open(c->input, O_RDONLY, 0666)) == -1)
@@ -53,7 +50,7 @@ execute_simple_command (command_t c)
         error(1, errno, "cannot do input redirect");
       close(fd_in);
     }
-    if (c->output != NULL) 
+    if (c->output != NULL)
     {
       // cmd > file
       //puts(c->output);
@@ -74,7 +71,7 @@ execute_simple_command (command_t c)
     //error(1, 0, "can't execute command!");
   }
 
-  else if (child > 0) 
+  else if (child > 0)
   {
     int status;
     // wait for the child process
@@ -151,7 +148,7 @@ execute_pipe_command (command_t c)
 }
 
 void
-execute_and_command (command_t c) 
+execute_and_command (command_t c)
 {
   execute_command(c->u.command[0], 0);
 
@@ -213,7 +210,7 @@ execute_command (command_t c, int time_travel)
      if(c == NULL)
       return;
     //printf("Enter%d\n", c->type);
-     if (!time_travel) 
+     if (!time_travel)
      {
       switch(c->type)
       {
