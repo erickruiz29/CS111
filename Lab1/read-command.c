@@ -2,7 +2,7 @@
 
 #include "command.h"
 #include "command-internals.h"
-#include "alloc.h" 
+#include "alloc.h"
 
 #include <error.h>
 #include <stdlib.h>
@@ -51,32 +51,32 @@ syntax_error()
 bool is_valid(char a)
 {
   // Tests for valid characters in a string that are not numbers/letters/operators
-  
+
   switch(a)
   {
-    case '!': 
+    case '!':
       return true;
-    case '%': 
+    case '%':
       return true;
-    case ',': 
+    case ',':
       return true;
-    case '-': 
+    case '-':
       return true;
-    case '+': 
+    case '+':
       return true;
-    case '.': 
+    case '.':
       return true;
-    case '/': 
+    case '/':
       return true;
-    case ':': 
+    case ':':
       return true;
-    case '@': 
+    case '@':
       return true;
-    case '^': 
+    case '^':
       return true;
-    case '_': 
-      return true;        
-    case '#': 
+    case '_':
+      return true;
+    case '#':
       return true;
   }
   return false;
@@ -87,19 +87,19 @@ bool is_special(char a)
   // Checks if a character is an operator
   switch (a)
   {
-   case '|': 
+   case '|':
       return true;
-   case '&': 
+   case '&':
       return true;
-   case '(': 
+   case '(':
       return true;
-   case ')': 
+   case ')':
       return true;
-   case '<': 
+   case '<':
       return true;
-   case '>': 
+   case '>':
       return true;
-   case ';': 
+   case ';':
       return true;
   }
   return false;
@@ -125,7 +125,7 @@ char* validationAndFormat(char *commandString) {
     currChar = get_byte(get_byte_argument);
 
     while(!feof(get_byte_argument)) {
-    
+
 
         //prevChar = currChar;
         //currChar = get_byte(get_byte_argument);
@@ -153,12 +153,12 @@ char* validationAndFormat(char *commandString) {
             }
         }
 
-        
+
 
         //putchar(currChar);
         //puts("Test3");
 
-        
+
 
         // Ignore everything in comments
         if (currChar == '#') {
@@ -175,7 +175,7 @@ char* validationAndFormat(char *commandString) {
 
             prevChar = '\n';
             currChar = get_byte(get_byte_argument);
-            continue;            
+            continue;
         }
 
 
@@ -207,7 +207,7 @@ char* validationAndFormat(char *commandString) {
         }
 
         if (currChar != '\n') {
-            
+
             if (commandString[0] == '\0' && is_special(currChar) && currChar != '(') {
                 //puts("TEST0");
                 syntax_error();
@@ -272,7 +272,7 @@ char* validationAndFormat(char *commandString) {
                 if (is_special(commandString[strlen(commandString)-1] && currChar != '(')) {
                     //puts("TESTM");
                     syntax_error();
-                }    
+                }
             }
 
             if ((currChar == '<' || currChar == '>') && is_special(commandString[strlen(commandString)-1])) {
@@ -288,7 +288,7 @@ char* validationAndFormat(char *commandString) {
 
         if (currChar == '\n') {
 
-            //puts("SEGa"); 
+            //puts("SEGa");
 
             if (commandString[strlen(commandString)-1] == '&' || commandString[strlen(commandString)-1] == '|') {
                 prevChar = currChar;
@@ -330,7 +330,7 @@ char* validationAndFormat(char *commandString) {
                             currChar = get_byte(get_byte_argument);
                         }
                         else
-                            break; 
+                            break;
                         //printf("%s 2 \n", commandString);
                         continue;
                     }
@@ -361,12 +361,12 @@ char* validationAndFormat(char *commandString) {
                 return commandString;
             }
 
-            
-        } 
+
+        }
 
 
-     
-       //puts("Test7/8"); 
+
+       //puts("Test7/8");
 
 
 
@@ -380,7 +380,7 @@ char* validationAndFormat(char *commandString) {
         }
 
         //putchar(currChar);
-        //puts("Test8"); 
+        //puts("Test8");
         prevChar = currChar;
 
         if (!feof(get_byte_argument)) {
@@ -395,7 +395,7 @@ char* validationAndFormat(char *commandString) {
          //currChar = get_byte(get_byte_argument);
 
         //putchar(currChar);
-        //puts("Test8"); 
+        //puts("Test8");
     }
 
 
@@ -403,9 +403,9 @@ char* validationAndFormat(char *commandString) {
     //puts("Test9");
 
     if (parenCount != 0) {
-         //puts("TESTP");    
+         //puts("TESTP");
          syntax_error();
-    }     
+    }
 
    //puts("Test10");
 
@@ -417,14 +417,14 @@ char* validationAndFormat(char *commandString) {
     }
 
     //printf("%s \n", commandString);
-    return commandString;  
+    return commandString;
 
 
 }
 
 
 
-void 
+void
 remove_whitespace()
 {
   if(!feof(get_byte_argument))
@@ -454,13 +454,13 @@ grabType(char *commandString)
   {
     //printf("while%d%c,%s\n", cnt,commandString[curLetter],commandString+curLetter);
     //the special characters that make the unique cases
-    switch(ch) 
+    switch(ch)
     {
 
       case '&':
         curLetter++;
         de = commandString[curLetter];
-        
+
         if(de == '&')
         {
           curLetter++;
@@ -482,8 +482,8 @@ grabType(char *commandString)
       case '|':
         curLetter++;
         de = commandString[curLetter];
-        
-        
+
+
         if(de == '|')
         {
           curLetter++;
@@ -498,8 +498,10 @@ grabType(char *commandString)
 
       case '\n': linecount++;
       case ';':
+        curLetter++;
+        return SEQUENCE_COMMAND;
       case '\0':
-        return SIMPLE_COMMAND;        
+        return SIMPLE_COMMAND;
     }
     curLetter++;
     ch = commandString[curLetter];
@@ -515,7 +517,7 @@ create_simple_command(char *commandString)
   command->type = SIMPLE_COMMAND; command->status = -1;
   command->input = NULL; command->output = NULL;
   command->u.word = checked_malloc(8*sizeof(char*)); size_t wordSize = 8;
-  size_t inputSize = 8; size_t outputSize = 8;      
+  size_t inputSize = 8; size_t outputSize = 8;
   size_t curWordSize; size_t index = 0; bool inWord = false;
   bool inInput = false; bool inOutput = false;
   bool input = false; bool output = false;
@@ -534,11 +536,11 @@ create_simple_command(char *commandString)
     }
     else if(commandString[i] == '>')
     {
-      command->output = checked_malloc(8*sizeof(char)); 
+      command->output = checked_malloc(8*sizeof(char));
       inInput = false;
       inOutput = true;
     }
-    else if(isalnum(commandString[i]) || 
+    else if(isalnum(commandString[i]) ||
       strchr(":@%+,_^-.!/", commandString[i]))
     {
 
@@ -585,12 +587,12 @@ create_simple_command(char *commandString)
       if(inWord)
       {
         index++;
-        inWord = false; 
+        inWord = false;
       }
       else if(input && inInput)
         inInput = false;
       else if(output && inOutput)
-        inOutput = false; 
+        inOutput = false;
     }
     else if(i+1 == len)
     {
@@ -628,7 +630,7 @@ create_subshell_command(char *commandString)
   //printf("%d\n", type);
   command_t command = create_command(commandString, type);
   //printf("%s\n",commandString+curLetter);
-  char ch = commandString[curLetter]; 
+  char ch = commandString[curLetter];
   curLetter++; int g = 0;
 
   //printf("after && %s\n",commandString+curLetter);
@@ -641,7 +643,7 @@ create_subshell_command(char *commandString)
   else
   {
     curLetter--;
-    command_t top = checked_malloc(sizeof(struct command)); 
+    command_t top = checked_malloc(sizeof(struct command));
     top->type = SEQUENCE_COMMAND; top->status = -1;
     top->u.command[0] = command; top->u.command[1] = NULL;
     ch = commandString[curLetter];
@@ -657,10 +659,10 @@ create_subshell_command(char *commandString)
       new_sequence->u.command[0] = create_command(commandString, type);
       new_sequence->u.command[1] = NULL;
       command_t bottom = top;
-      
+
       while(bottom->u.command[1] != NULL)
         bottom = bottom->u.command[1];
-      
+
       bottom->u.command[1] = new_sequence;
       curLetter++;
       g++;
@@ -682,7 +684,7 @@ create_multi_command(char *commandString, enum command_type type, command_t call
   if(caller == NULL)
     multi_command->u.command[0] = create_simple_command(commandString);
 
-  else if(caller->type == SUBSHELL_COMMAND || 
+  else if(caller->type == SUBSHELL_COMMAND ||
     (type == PIPE_COMMAND) == (caller->type == PIPE_COMMAND) ||
     (type != PIPE_COMMAND && caller->type == PIPE_COMMAND))
     {
@@ -714,7 +716,7 @@ create_multi_command(char *commandString, enum command_type type, command_t call
   {
     command_t subshell = create_subshell_command(commandString);
     next_type = grabType(commandString);
-    
+
     if(next_type == SIMPLE_COMMAND)
     {
       multi_command->u.command[1] = subshell;
@@ -808,7 +810,7 @@ make_command_stream (int (*get_next_byte) (void *),
     if(cLen == 0)
       return NULL;
   }
-  
+
   command_stream_t new_stream = checked_malloc(sizeof(struct command_stream));
   //new_stream->first;
   new_stream->next = NULL;
@@ -818,14 +820,14 @@ make_command_stream (int (*get_next_byte) (void *),
   //printf("%s\n",commandString);
 
   //while theres no more to grab
-  while(cLen != 0) 
+  while(cLen != 0)
   {
     //printf("%s\n",commandString);
     temp_node = create_node(commandString,type);
     if(head == NULL)
     {
       head = temp_node;
-    } 
+    }
     else
     {
       temp_node->prev = tail;
@@ -877,9 +879,6 @@ struct command_stream
 command_t
 read_command_stream (command_stream_t s)
 {
-  //printf("Stream First %d\n", (*(s->first))->theCommand->type);
-  //if(s->next != NULL)
-    //printf("Stream Next %d\n", (*(s->next))->theCommand->type);
   if(*(s->next) != NULL)
   {
     command_node_t stream = *(s->next);
@@ -895,9 +894,7 @@ read_command_stream (command_stream_t s)
     {
       command_node_t del = temp;
       temp = temp->next;
-      //printf("Freeing %d\n", del->theCommand->type);
       free(del->theCommand);
-      //printf("Freeing\n");
       free(del);
     }
   }

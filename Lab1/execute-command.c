@@ -18,21 +18,6 @@
 #include <unistd.h>
 
 
-/*enum file_type
-{
-	READ_FILE,
-	WRITE_FILE
-};
-
-struct file_node {
-	char *name;
-	enum file_type type;
-	file_node_t next;
-	file_node_t prev;
-};*/
-
-
-
 void
 execute_simple_command (command_t c)
 {
@@ -236,9 +221,79 @@ execute_command (command_t c, int time_travel)
           error(1, 0, "Incorrect Command Type");
       }
      }
-     //printf("Exit%d\n", c->type);
-     //filler for compilation
-     //command_t a = c;
-     int b = time_travel;
-     //error (1, 0, "command execution not yet implemented");
+}
+
+/////////////////////////////////
+//Time travel functions
+/////////////////////////////////
+
+struct word_t
+{
+    char* word;
+    struct word_t *next;
+};
+
+//Edge to dependencies
+struct dep_edge_node
+{
+    struct dc_node *dependent;
+    struct dep_edge_node *next;
+};
+
+//Dependent command node
+struct dc_node
+{
+    command_t *c;
+    word_t *inputs;
+    word_t *outputs;
+    int num_dependencies;
+    struct dep_edge_node *deps;
+
+    int pid;
+    struct dc_node *next;
+};
+
+command_t
+grab_next_command(command_t c)
+{
+    if(c->next != NULL)
+    {
+        command_t temp = c->next;
+        del(c)
+        return temp
+    }
+    del(c);
+    return NULL;
+}
+
+void
+add_command_dep(command_t cmd, dc_node node)
+{
+    //TODO grab dependencies from command
+    return;
+}
+
+void
+execute_time_travel(command_t first)
+{
+    dc_node dep_graph_head = NULL;
+    command_t command = first;
+    //read all commands; create dependency graph.
+    do
+    {
+        dc_node new_node = checked_malloc(sizeof(struct dc_node));
+        new_node->c = command;
+        new_node->inputs = NULL;
+        new_node->outputs = NULL;
+        new_node->num_dependencies = 0;
+        new_node->dep_edge_node = NULL;
+        new_node->pid = -1;
+
+        //add dependencies from command
+        add_command_dep(command, new_node);
+
+    }while(command = grab_next_command(first))
+
+    //execute commands from the dependency graph
+
 }
