@@ -221,6 +221,8 @@ execute_command (command_t c, int time_travel)
           error(1, 0, "Incorrect Command Type");
       }
      }
+     else
+        execute_time_travel(c);
 }
 
 /////////////////////////////////
@@ -266,11 +268,82 @@ grab_next_command(command_t c)
     return NULL;
 }
 
+word_t create_word_t(char* word)
+{
+    word_t new_word = checked_malloc(sizeof(struct word_t));
+    new_word->word = word;
+    new_word->next = NULL;
+    return new_word;
+}
+
+void
+add_word_dep(word_t words, char* word)
+{
+    word_t *temp = &words;
+    while(temp != NULL)
+    {
+        if(strcmp(temp->word, word) == 0)
+            return;
+        temp = words->next;
+    }
+    //word not found inside words
+    temp = checked_malloc(sizeof(struct word_t));
+    temp->word = word;
+    temp->next = NULL;
+}
+
 void
 add_command_dep(command_t cmd, dc_node node)
 {
-    //TODO grab dependencies from command
-    return;
+    //if there is an input or output,
+    //add the word dep to node
+    if(cmd->input != 0)
+    {
+        if(node->inputs == NULL) //not initiated yet
+            node->inputs = create_word_t(cmd->input);
+        else
+            add_word_dep(node->inputs, cmd->input);
+    }
+
+    if(cmd->output != 0)
+    {
+        if(node->outputs == NULL) //not initiated yet
+            node->outputs = create_word_t(cmd->output);
+        else
+            add_word_dep(node->outputs, cmd->output);
+    }
+
+    //add dep from the commands
+    int i = 1;
+    switch(cmd->type)
+    {
+        //all these types have two subcommands
+        case AND_COMMAND:
+        case OR_COMMAND:
+        case PIPE_COMMAND:
+        case SEQUENCE_COMMAND:
+            add_command_dep(cmd->u.command[0], node);
+            add_command_dep(cmd->u.command[1], node);
+            break;
+
+        //subshell only has one subcommand
+        case SUBSHELL_COMMAND:
+            add_command_dep(cmd->u.subshell_command, node);
+            break;
+
+        //simple has some input dep
+        case SIMPLE_COMMAND:
+            while(cmd->u.word[i] != NULL)
+            {
+                if(node->inputs == NULL) //not initiated yet
+                    node->inputs = create_word_t(cmd->u.word[i]);
+                else
+                    add_word_dep(node->inputs, cmd->u.word[i]);
+                i++;
+            }
+            break;
+    }
+
 }
 
 void
