@@ -236,10 +236,10 @@ struct word_t
 };
 
 //Edge to dependencies
-struct dep_edge_node
+struct dep_node
 {
-    struct dc_node *dependent;
-    struct dep_edge_node *next;
+    struct dc_node *dep;
+    struct dep_node *next;
 };
 
 //Dependent command node
@@ -249,7 +249,7 @@ struct dc_node
     word_t *inputs;
     word_t *outputs;
     int num_dependencies;
-    struct dep_edge_node *deps;
+    struct dep_node *dependents;
 
     int pid;
     struct dc_node *next;
@@ -344,6 +344,49 @@ add_command_dep(command_t cmd, dc_node node)
             break;
     }
 
+}
+
+void
+append_dc_dep(dc_node top, dc_node add)
+{
+    dep_node temp = top->dependents;
+    dep_node last = temp;
+    while(temp != NULL)
+    {
+        last = temp;
+        temp = temp->next;
+    }
+    dep_node new_dep = checked_malloc(sizeof(struct dep_node));
+    new_dep->dependent = add;
+    new_dep->next = NULL;
+    if(last == NULL)
+        top->dependents = new_dep;
+    else
+        last->next = new_dep;
+}
+
+void
+compare_dc_nodes(word_t input, word_t output, dc_node new_dep, dc_node old_cmd)
+{
+    //compare all outputs to all inputs
+    word_t cur_out = output;
+    while(cur_out != NULL)
+    {
+        word_t cur_in = input;
+        while(cur_in != NULL)
+        {
+            //if there is a match, add new_dep dep to old_cmd
+            if(strcmp(cur_in->word, cur_out->word) == 0)
+            {
+                new_dep->dependencies += 1;
+                append_dc_dep(old_cmd, new_dep);
+                return;
+            }
+
+            cur_in = cur_in->next;
+        }
+        cur_out = cur_out->next;
+    }
 }
 
 void
