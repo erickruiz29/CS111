@@ -35,3 +35,28 @@ struct command
   } u;
 };
 
+struct word
+{
+    char* word;
+    struct word *next;
+};
+
+//Edge to dependencies
+struct dep_node
+{
+    struct dc_node *dep;
+    struct dep_node *next;
+};
+
+//Dependent command node
+struct dc_node
+{
+    struct command *c;
+    struct word *inputs;
+    struct word *outputs;
+    int num_dependencies;
+    struct dep_node *dependents;
+
+    int pid;
+    struct dc_node *next;
+};

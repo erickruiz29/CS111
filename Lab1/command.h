@@ -2,6 +2,9 @@
 
 typedef struct command *command_t;
 typedef struct command_stream *command_stream_t;
+typedef struct word *word_t;
+typedef struct dep_node *dep_node_t;
+typedef struct dc_node *dc_node_t;
 
 /* Create a command stream from LABEL, GETBYTE, and ARG.  A reader of
    the command stream will invoke GETBYTE (ARG) to get the next byte.
@@ -23,3 +26,5 @@ void execute_command (command_t, int);
 /* Return the exit status of a command, which must have previously been executed.
    Wait for the command, if it is not already finished.  */
 int command_status (command_t);
+
+command_t execute_time_travel (command_stream_t);

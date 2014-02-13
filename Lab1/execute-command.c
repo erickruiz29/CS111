@@ -18,6 +18,8 @@
 #include <unistd.h>
 
 
+command_t execute_time_travel(command_stream_t s);
+
 void
 execute_simple_command (command_t c)
 {
@@ -221,56 +223,16 @@ execute_command (command_t c, int time_travel)
           error(1, 0, "Incorrect Command Type");
       }
      }
-     else
-        execute_time_travel(c);
 }
 
 /////////////////////////////////
 //Time travel functions
 /////////////////////////////////
 
-struct word_t
-{
-    char* word;
-    struct word_t *next;
-};
-
-//Edge to dependencies
-struct dep_node
-{
-    struct dc_node *dep;
-    struct dep_node *next;
-};
-
-//Dependent command node
-struct dc_node
-{
-    command_t *c;
-    word_t *inputs;
-    word_t *outputs;
-    int num_dependencies;
-    struct dep_node *dependents;
-
-    int pid;
-    struct dc_node *next;
-};
-
-command_t
-grab_next_command(command_t c)
-{
-    if(c->next != NULL)
-    {
-        command_t temp = c->next;
-        del(c)
-        return temp
-    }
-    del(c);
-    return NULL;
-}
 
 word_t create_word_t(char* word)
 {
-    word_t new_word = checked_malloc(sizeof(struct word_t));
+    word_t new_word = checked_malloc(sizeof(word_t));
     new_word->word = word;
     new_word->next = NULL;
     return new_word;
@@ -279,21 +241,20 @@ word_t create_word_t(char* word)
 void
 add_word_dep(word_t words, char* word)
 {
-    word_t *temp = &words;
-    while(temp != NULL)
+    if(strcmp(words->word, word) == 0)
+        return;
+    else if(words->next == NULL)
     {
-        if(strcmp(temp->word, word) == 0)
-            return;
-        temp = words->next;
+        words->next = checked_malloc(sizeof(word_t));
+        words->next->word = word;
+        words->next->next = NULL;
     }
-    //word not found inside words
-    temp = checked_malloc(sizeof(struct word_t));
-    temp->word = word;
-    temp->next = NULL;
+    else
+        add_word_dep(words->next, word);
 }
 
 void
-add_command_dep(command_t cmd, dc_node node)
+add_command_dep(command_t cmd, dc_node_t node)
 {
     //if there is an input or output,
     //add the word dep to node
@@ -347,17 +308,17 @@ add_command_dep(command_t cmd, dc_node node)
 }
 
 void
-append_dc_dep(dc_node top, dc_node add)
+append_dc_dep(dc_node_t top, dc_node_t add)
 {
-    dep_node temp = top->dependents;
-    dep_node last = temp;
+    dep_node_t temp = top->dependents;
+    dep_node_t last = temp;
     while(temp != NULL)
     {
         last = temp;
         temp = temp->next;
     }
-    dep_node new_dep = checked_malloc(sizeof(struct dep_node));
-    new_dep->dependent = add;
+    dep_node_t new_dep = checked_malloc(sizeof(struct dep_node));
+    new_dep->dep = add;
     new_dep->next = NULL;
     if(last == NULL)
         top->dependents = new_dep;
@@ -366,7 +327,7 @@ append_dc_dep(dc_node top, dc_node add)
 }
 
 void
-compare_dc_nodes(word_t input, word_t output, dc_node new_dep, dc_node old_cmd)
+compare_dc_nodes(word_t input, word_t output, dc_node_t new_dep, dc_node_t old_cmd)
 {
     //compare all outputs to all inputs
     word_t cur_out = output;
@@ -378,7 +339,7 @@ compare_dc_nodes(word_t input, word_t output, dc_node new_dep, dc_node old_cmd)
             //if there is a match, add new_dep dep to old_cmd
             if(strcmp(cur_in->word, cur_out->word) == 0)
             {
-                new_dep->dependencies += 1;
+                new_dep->num_dependencies += 1;
                 append_dc_dep(old_cmd, new_dep);
                 return;
             }
@@ -389,27 +350,112 @@ compare_dc_nodes(word_t input, word_t output, dc_node new_dep, dc_node old_cmd)
     }
 }
 
-void
-execute_time_travel(command_t first)
+command_t
+execute_time_travel(command_stream_t s)
 {
-    dc_node dep_graph_head = NULL;
-    command_t command = first;
+    dc_node_t dep_graph_head = NULL;
+    command_t command = NULL;
+    command_t last_command = NULL;
     //read all commands; create dependency graph.
-    do
+    while((command = read_command_stream(s)))
     {
-        dc_node new_node = checked_malloc(sizeof(struct dc_node));
+        dc_node_t new_node = checked_malloc(sizeof(struct dc_node));
         new_node->c = command;
         new_node->inputs = NULL;
         new_node->outputs = NULL;
         new_node->num_dependencies = 0;
-        new_node->dep_edge_node = NULL;
+        new_node->dependents = NULL;
         new_node->pid = -1;
 
         //add dependencies from command
         add_command_dep(command, new_node);
 
-    }while(command = grab_next_command(first))
+        dc_node_t last_node = dep_graph_head;
+        dc_node_t cur_node  = dep_graph_head;
+        //go through the whole graph
+        while(cur_node != NULL)
+        {
+            //if a dep is found, add it
+            compare_dc_nodes(cur_node->inputs, new_node->outputs, new_node, cur_node);
+            compare_dc_nodes(new_node->inputs, cur_node->outputs, new_node, cur_node);
+            last_node = cur_node;
+            cur_node = cur_node->next;
+        }
+
+        if(last_node == NULL)
+            dep_graph_head = new_node;
+        else
+            last_node->next = new_node;
+
+        last_command = command;
+    }
 
     //execute commands from the dependency graph
 
+    //Continue to grab the next on the graph
+    while(dep_graph_head != NULL)
+    {
+        dc_node_t cur_node = dep_graph_head;
+        while(cur_node != NULL)
+        {
+          //If there are no dep on it and not running
+          if(cur_node->num_dependencies == 0 && cur_node->pid < 1)
+          {
+            //fork and execute, indicate its pid
+            int pid = fork();
+            if(pid == -1)
+                error(1, errno, "forking error");
+            else if( pid == 0)
+            {
+                execute_command(cur_node->c,0);
+                exit(cur_node->c->status);
+            }
+            else if( pid > 0)
+            {
+                cur_node->pid = pid;
+            }
+          }
+
+          cur_node = cur_node->next;
+        }
+
+        int status;
+        //Get the pid of a finished process
+        pid_t fin_pid = waitpid(-1, &status, 0);
+
+        // Use pid to determine who finished and remove them
+        dc_node_t prev_node = NULL;
+        dc_node_t fin_node = dep_graph_head;
+        while(fin_node != NULL)
+        {
+          // If they're not waiting on anyone
+          if(fin_node->pid == fin_pid)
+          {
+            dep_node_t cur_dep = fin_node->dependents;
+            // for all on the list of dependents
+            while(cur_dep != NULL)
+            {
+              dc_node_t freed_node = cur_dep->dep;
+              // free that dependent (reduce dependencies)
+              freed_node->num_dependencies -= 1;
+
+              cur_dep = cur_dep->next;
+            }
+
+            // remove from the list
+            if(prev_node == NULL)
+              dep_graph_head = fin_node->next;
+            else
+              prev_node->next = fin_node->next;
+            break;
+          }
+
+          prev_node = fin_node;
+          fin_node = fin_node->next;
+        }
+
+    }
+
+
+    return last_command;
 }
