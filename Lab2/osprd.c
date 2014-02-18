@@ -34,7 +34,8 @@
 MODULE_LICENSE("Dual BSD/GPL");
 MODULE_DESCRIPTION("CS 111 RAM Disk");
 // EXERCISE: Pass your names into the kernel as the module's authors.
-MODULE_AUTHOR("Skeletor");
+MODULE_AUTHOR("Erick Ruiz");
+MODULE_AUTHOR("Earl Escueta");
 
 #define OSPRD_MAJOR	222
 
@@ -64,6 +65,8 @@ typedef struct osprd_info {
 
 	/* HINT: You may want to add additional fields to help
 	         in detecting deadlock. */
+
+
 
 	// The following elements are used internally; you don't need
 	// to understand them.
