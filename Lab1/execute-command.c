@@ -169,9 +169,36 @@ execute_or_command (command_t c) {
 
 void
 execute_sequence_command(command_t c) {
-  execute_command(c->u.command[0], 0);
-  execute_command(c->u.command[1], 0);
-  c->status = c->u.command[1]->status;
+  int status;
+  pid_t pid = fork();
+  if(pid > 0)
+  {
+    // Parent process
+    waitpid(pid, &status, 0);
+    c->status = status;
+  }
+  else if(pid == 0)
+  {
+    //Child process
+    pid = fork();
+    if( pid > 0)
+    {
+      // The child continues
+      waitpid(pid, &status, 0);
+      execute_simple_command (c->u.command[1]);
+      _exit(c->u.command[1]->status);
+    }
+    else if( pid == 0)
+    {
+      // The child of the child now runs
+      execute_simple_command (c->u.command[0]);
+      _exit(c->u.command[0]->status);
+    }
+    else
+      error(1, 0, "Could not fork");
+  }
+  else
+    error(1, 0, "Could not fork");
 }
 
 void
@@ -357,7 +384,7 @@ execute_time_travel(command_stream_t s)
     command_t command = NULL;
     command_t last_command = NULL;
     //read all commands; create dependency graph.
-    while((command = read_command_stream(s)))
+    while((command = read_command_stream_t(s)))
     {
         dc_node_t new_node = checked_malloc(sizeof(struct dc_node));
         new_node->c = command;
@@ -388,7 +415,11 @@ execute_time_travel(command_stream_t s)
             last_node->next = new_node;
 
         last_command = command;
+        //printf("%d \n", dep_graph_head->c->type);
+
     }
+
+    //printf("%d \n", dep_graph_head->c->type);
 
     //execute commands from the dependency graph
 
@@ -456,6 +487,6 @@ execute_time_travel(command_stream_t s)
 
     }
 
-
+    delete_command_stream_t(s);
     return last_command;
 }

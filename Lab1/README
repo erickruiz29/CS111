@@ -4,12 +4,6 @@ Erick Ruiz
 Earl Escueta
 204 024 077
 
-Lab 1a - Project
+Lab 1c - Project
 
-
-TODO:
-parallelize (commands1) ; (commands2)
-commands1 and commands2 will be parallelized but
-(c1; c2) ; (c3; c4)
-
-c1 and c2 will be serial and so will c3 and c4 but c1 and c3 will be parallelized unless they have dependencies
+Complete Project 1. This code has no known limitations.

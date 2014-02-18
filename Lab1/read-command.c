@@ -900,3 +900,43 @@ read_command_stream (command_stream_t s)
   }
   return NULL;
 }
+
+command_t
+read_command_stream_t (command_stream_t s)
+{
+  if(*(s->next) != NULL)
+  {
+    command_node_t stream = *(s->next);
+    s->next = &(stream->next);
+
+    return stream->theCommand;
+  }
+  //end of stream, clean up
+  else
+  {
+    command_node_t temp = s->first;
+    while(temp != NULL)
+    {
+      command_node_t del = temp;
+      temp = temp->next;
+      //free(del->theCommand);
+      //free(del);
+    }
+  }
+  return NULL;
+}
+
+command_t
+delete_command_stream_t (command_stream_t s)
+{
+  command_node_t temp = s->first;
+    while(temp != NULL)
+    {
+      command_node_t del = temp;
+      temp = temp->next;
+      free(del->theCommand);
+      free(del);
+    }
+  return NULL;
+}
+
