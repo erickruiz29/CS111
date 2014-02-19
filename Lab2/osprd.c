@@ -45,6 +45,12 @@ MODULE_AUTHOR("Earl Escueta");
 static int nsectors = 32;
 module_param(nsectors, int, 0);
 
+struct pid_list{
+  pid_t pid;
+  struct pid_list *next;
+};
+typedef struct pid_list *pid_list_t;
+
 
 /* The internal representation of our device. */
 typedef struct osprd_info {
@@ -65,6 +71,16 @@ typedef struct osprd_info {
 
 	/* HINT: You may want to add additional fields to help
 	         in detecting deadlock. */
+
+	// number of read locks
+	int read_locks;
+	// number of write locks
+	int write_locks;
+
+	// pid of write lock
+	pid_t write_pid;
+	// pids of read locks
+	pid_list_t read_pids;
 
 
 
@@ -124,8 +140,19 @@ static void osprd_process_request(osprd_info_t *d, struct request *req)
 	// 'req->buffer' members, and the rq_data_dir() function.
 
 	// Your code here.
-	eprintk("Should process request...\n");
+	//int requestType = rq_data_dir(req);
+	int offset = (req->sector) * SECTOR_SIZE;
+	if(rq_data_dir(req) == READ) {
+		memcpy(req->buffer, d->data+offset, req->current_nr_sectors * SECTOR_SIZE);	
+	}
+	else if (rq_data_dir(req) == WRITE) {
+		memcpy(d->data+offset, req->buffer, req->current_nr_sectors * SECTOR_SIZE);
+	}
+	else { 
+		eprintk("Could not process request...\n");
+	}
 
+	// eprintk("Should process request...\n");
 	end_request(req, 1);
 }
 
@@ -146,6 +173,7 @@ static int osprd_open(struct inode *inode, struct file *filp)
 // last copy is closed.)
 static int osprd_close_last(struct inode *inode, struct file *filp)
 {
+
 	if (filp) {
 		osprd_info_t *d = file2osprd(filp);
 		int filp_writable = filp->f_mode & FMODE_WRITE;
@@ -155,9 +183,45 @@ static int osprd_close_last(struct inode *inode, struct file *filp)
 		// as appropriate.
 
 		// Your code here.
+		osp_spin_lock(&d->mutex);
+
+		if((filp->f_flags & F_OSPRD_LOCKED) == 0) {
+			osp_spin_unlock(&d->mutex);
+			return 0;
+		}
+		else {
+			if (filp_writable != 0) {
+				d->write_locks--;
+				d->write_pid = -1;
+			}
+			else {
+				d->read_locks--;
+				pid_list_t curr = d->read_pids;
+				pid_list_t prev = d->read_pids;
+				while(curr != NULL)
+				{
+					if (curr->pid == current->pid) {
+						if (prev != NULL) {
+							prev->next = curr->next;
+							break;
+						}
+						else {
+							d->read_pids = curr->next;
+						}
+					}
+					else {
+						prev = curr;
+						curr = curr->next;
+					}
+				}
+
+			}
+			wake_up_all(&d->blockq);
+		}
+		osp_spin_unlock(&d->mutex);
 
 		// This line avoids compiler warnings; you may remove it.
-		(void) filp_writable, (void) d;
+		// (void) filp_writable, (void) d;
 
 	}
 
