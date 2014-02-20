@@ -34,8 +34,8 @@
 MODULE_LICENSE("Dual BSD/GPL");
 MODULE_DESCRIPTION("CS 111 RAM Disk");
 // EXERCISE: Pass your names into the kernel as the module's authors.
-MODULE_AUTHOR("Erick Ruiz");
-MODULE_AUTHOR("Earl Escueta");
+MODULE_AUTHOR("Erick Ruiz and Earl Escueta");
+
 
 #define OSPRD_MAJOR	222
 
@@ -82,7 +82,9 @@ typedef struct osprd_info {
 	// pids of read locks
 	pid_list_t read_pids;
 
-
+    unsigned *dead_tickets;
+    int dt_len;
+    int dt_cap;
 
 	// The following elements are used internally; you don't need
 	// to understand them.
@@ -97,6 +99,8 @@ static osprd_info_t osprds[NOSPRD];
 
 
 // Declare useful helper functions
+
+static int is_ticket_tail_dead(osprd_info_t *d);
 
 /*
  * file2osprd(filp)
@@ -141,16 +145,21 @@ static void osprd_process_request(osprd_info_t *d, struct request *req)
 
 	// Your code here.
 	//int requestType = rq_data_dir(req);
+
+    osp_spin_lock(&d->mutex);
+
 	int offset = (req->sector) * SECTOR_SIZE;
 	if(rq_data_dir(req) == READ) {
-		memcpy(req->buffer, d->data+offset, req->current_nr_sectors * SECTOR_SIZE);	
+		memcpy(req->buffer, d->data+offset, req->current_nr_sectors * SECTOR_SIZE);
 	}
 	else if (rq_data_dir(req) == WRITE) {
 		memcpy(d->data+offset, req->buffer, req->current_nr_sectors * SECTOR_SIZE);
 	}
-	else { 
+	else {
 		eprintk("Could not process request...\n");
 	}
+
+    osp_spin_unlock(&d->mutex);
 
 	// eprintk("Should process request...\n");
 	end_request(req, 1);
@@ -217,6 +226,8 @@ static int osprd_close_last(struct inode *inode, struct file *filp)
 
 			}
 			wake_up_all(&d->blockq);
+            //Do we need to unflag the f_flags? Earl, you didnt include this..
+            filp->f_flag &= ~F_OSPRD_LOCKED;
 		}
 		osp_spin_unlock(&d->mutex);
 
@@ -289,8 +300,66 @@ int osprd_ioctl(struct inode *inode, struct file *filp,
 		// be protected by a spinlock; which ones?)
 
 		// Your code here (instead of the next two lines).
-		eprintk("Attempting to acquire\n");
-		r = -ENOTTY;
+		// eprintk("Attempting to acquire\n");
+		// r = -ENOTTY;
+
+        if( d == NULL)
+            return -1;
+
+        osp_spin_lock(&d->mutex);
+        if(current->pid == d->write_pid)
+        {
+            osp_spin_unlock(&d->mutex);
+            return -EDEADLK;
+        }
+
+        unsigned local_ticket = d->ticket_head++;
+        osp_spin_unlock(&d->mutex);
+
+        wei_ret = wait_event_interruptible(d->blockq, d->write_locks == 0 &&
+                            (!filp_writable || d->read_locks == 0) &&
+                            d->ticket_tail == local_ticket);
+        if(wei_ret == -ERESTARTSYS)
+        {
+            osp_spin_lock(&d->mutex);
+
+            //if process is killed, ticket expires.
+            //add to dead_ticket array
+            d->dt_len++;
+            d->dead_tickets[d->dt_len] = local_ticket;
+            if (d->dt_len == d->dead_tickets_capacity) {
+                d->dt_cap *= 2;
+                unsigned *temp_dt = kzalloc(sizeof(unsigned) *d->dead_tickets_capacity,
+                                        GFP_ATOMIC);
+                memcpy(temp_dead_tickets, d->dead_tickets, sizeof(unsigned) *d->dt_len);
+                kfree(d->dead_tickets);
+                d->dead_tickets = temp_dt;
+            }
+            while (is_ticket_tail_dead(d)) {
+                d->ticket_tail++;
+            }
+            osp_spin_unlock(&d->mutex);
+            return -ERESTARTSYS;
+
+        }
+
+        osp_spin_lock(&d->mutex);
+
+        if (filp_writable)
+            d->write_lock++;
+        else
+            d->read_lock++;
+
+        filp->f_flags |= F_OSPRD_LOCKED;
+
+        do
+        {
+            d->ticket_tail++;
+
+        } while (is_ticket_tail_dead(d));
+
+        osp_spin_unlock(&d->mutex);
+
 
 	} else if (cmd == OSPRDIOCTRYACQUIRE) {
 
@@ -302,8 +371,29 @@ int osprd_ioctl(struct inode *inode, struct file *filp,
 		// Otherwise, if we can grant the lock request, return 0.
 
 		// Your code here (instead of the next two lines).
-		eprintk("Attempting to try acquire\n");
-		r = -ENOTTY;
+
+        osp_spin_lock(&d->mutex);
+
+        if (d->write_lock == 0 &&
+                (!filp_writable || d->read_lock == 0) &&
+                d->ticket_tail == d->ticket_head)
+        {
+
+            if (filp_writable)
+                d->write_lock++;
+            else
+                d->read_lock++;
+
+            filp->f_flags |= F_OSPRD_LOCKED;
+
+        }
+        else
+            r = -EBUSY;
+
+        osp_spin_unlock(&d->mutex);
+
+		//eprintk("Attempting to try acquire\n");
+		//r = -ENOTTY;
 
 	} else if (cmd == OSPRDIOCRELEASE) {
 
@@ -315,7 +405,25 @@ int osprd_ioctl(struct inode *inode, struct file *filp,
 		// you need, and return 0.
 
 		// Your code here (instead of the next line).
-		r = -ENOTTY;
+		osp_spin_lock(&d->mutex);
+
+        if (!filp->f_flags & F_OSPRD_LOCKED)
+            r = -EINVAL;
+        else
+        {
+            if (filp_writable)
+                d->write_lock--;
+            else
+                d->read_lock--;
+
+            wake_up_all(&d->blockq);
+            filp->f_flags &= !F_OSPRD_LOCKED;
+
+        }
+
+        osp_spin_unlock(&d->mutex);
+
+        //r = -ENOTTY;
 
 	} else
 		r = -ENOTTY; /* unknown command */
@@ -332,7 +440,23 @@ static void osprd_setup(osprd_info_t *d)
 	osp_spin_lock_init(&d->mutex);
 	d->ticket_head = d->ticket_tail = 0;
 	/* Add code here if you add fields to osprd_info_t. */
+    d->read_locks = 0;
+    d->write_locks = 0;
+    d->dead_tickets = kzalloc(sizeof(unsigned) * ARRAY_INIT_SIZE, GFP_ATOMIC);
+    d->dt_len = 0;
+    d->dt_cap = ARRAY_INIT_SIZE;
 }
+
+static int is_ticket_tail_dead(osprd_info_t *d) {
+    size_t i;
+    for (i = 0; i < d->dt_len; i++) {
+        if (d->ticket_tail == d->dead_tickets[i]) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 
 
 /*****************************************************************************/
