@@ -306,8 +306,11 @@ int osprd_ioctl(struct inode *inode, struct file *filp,
 
             //if process is killed, ticket expires.
             //add to dead_ticket array
-            d->dt_len++;
+            //d->dt_len++;
+            //d->dead_tickets[d->dt_len++] = local_ticket;
+
             d->dead_tickets[d->dt_len] = local_ticket;
+            d->dt_len++;
             if (d->dt_len == d->dt_cap) {
                 d->dt_cap *= 2;
                 unsigned *temp_dt = kzalloc(sizeof(unsigned) *d->dt_cap,
