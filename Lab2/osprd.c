@@ -79,8 +79,9 @@ typedef struct osprd_info {
 
 	// pid of write lock
 	pid_t write_pid;
-	// pids of read locks
-	pid_list_t read_pids;
+
+    // pids of read locks
+	//pid_list_t read_pids;
 
     unsigned *dead_tickets;
     int dt_len;
@@ -99,6 +100,8 @@ static osprd_info_t osprds[NOSPRD];
 
 
 // Declare useful helper functions
+
+#define ARRAY_INIT_SIZE 2
 
 static int is_ticket_tail_dead(osprd_info_t *d);
 
@@ -148,6 +151,16 @@ static void osprd_process_request(osprd_info_t *d, struct request *req)
 
     osp_spin_lock(&d->mutex);
 
+
+    //ERROR CHECK
+    if(req->sector < 0 ||
+        req->sector + req->current_nr_sectors > nsectors)
+    {
+        end_request(req,0);
+        osp_spin_unlock(&d->mutex);
+        return;
+    }
+
 	int offset = (req->sector) * SECTOR_SIZE;
 	if(rq_data_dir(req) == READ) {
 		memcpy(req->buffer, d->data+offset, req->current_nr_sectors * SECTOR_SIZE);
@@ -194,40 +207,15 @@ static int osprd_close_last(struct inode *inode, struct file *filp)
 		// Your code here.
 		osp_spin_lock(&d->mutex);
 
-		if((filp->f_flags & F_OSPRD_LOCKED) == 0) {
-			osp_spin_unlock(&d->mutex);
-			return 0;
-		}
-		else {
-			if (filp_writable != 0) {
+		if(filp->f_flags & F_OSPRD_LOCKED)
+        {
+			if (filp_writable != 0)
 				d->write_locks--;
-				d->write_pid = -1;
-			}
-			else {
+			else
 				d->read_locks--;
-				pid_list_t curr = d->read_pids;
-				pid_list_t prev = d->read_pids;
-				while(curr != NULL)
-				{
-					if (curr->pid == current->pid) {
-						if (prev != NULL) {
-							prev->next = curr->next;
-							break;
-						}
-						else {
-							d->read_pids = curr->next;
-						}
-					}
-					else {
-						prev = curr;
-						curr = curr->next;
-					}
-				}
 
-			}
 			wake_up_all(&d->blockq);
-            //Do we need to unflag the f_flags? Earl, you didnt include this..
-            filp->f_flag &= ~F_OSPRD_LOCKED;
+            filp->f_flags &= !F_OSPRD_LOCKED;
 		}
 		osp_spin_unlock(&d->mutex);
 
@@ -303,22 +291,15 @@ int osprd_ioctl(struct inode *inode, struct file *filp,
 		// eprintk("Attempting to acquire\n");
 		// r = -ENOTTY;
 
-        if( d == NULL)
-            return -1;
-
         osp_spin_lock(&d->mutex);
-        if(current->pid == d->write_pid)
-        {
-            osp_spin_unlock(&d->mutex);
-            return -EDEADLK;
-        }
 
         unsigned local_ticket = d->ticket_head++;
         osp_spin_unlock(&d->mutex);
 
-        wei_ret = wait_event_interruptible(d->blockq, d->write_locks == 0 &&
+        int wei_ret = wait_event_interruptible(d->blockq, d->write_locks == 0 &&
                             (!filp_writable || d->read_locks == 0) &&
                             d->ticket_tail == local_ticket);
+
         if(wei_ret == -ERESTARTSYS)
         {
             osp_spin_lock(&d->mutex);
@@ -327,11 +308,11 @@ int osprd_ioctl(struct inode *inode, struct file *filp,
             //add to dead_ticket array
             d->dt_len++;
             d->dead_tickets[d->dt_len] = local_ticket;
-            if (d->dt_len == d->dead_tickets_capacity) {
+            if (d->dt_len == d->dt_cap) {
                 d->dt_cap *= 2;
-                unsigned *temp_dt = kzalloc(sizeof(unsigned) *d->dead_tickets_capacity,
+                unsigned *temp_dt = kzalloc(sizeof(unsigned) *d->dt_cap,
                                         GFP_ATOMIC);
-                memcpy(temp_dead_tickets, d->dead_tickets, sizeof(unsigned) *d->dt_len);
+                memcpy(temp_dt, d->dead_tickets, sizeof(unsigned) *d->dt_len);
                 kfree(d->dead_tickets);
                 d->dead_tickets = temp_dt;
             }
@@ -346,9 +327,9 @@ int osprd_ioctl(struct inode *inode, struct file *filp,
         osp_spin_lock(&d->mutex);
 
         if (filp_writable)
-            d->write_lock++;
+            d->write_locks++;
         else
-            d->read_lock++;
+            d->read_locks++;
 
         filp->f_flags |= F_OSPRD_LOCKED;
 
@@ -374,15 +355,15 @@ int osprd_ioctl(struct inode *inode, struct file *filp,
 
         osp_spin_lock(&d->mutex);
 
-        if (d->write_lock == 0 &&
-                (!filp_writable || d->read_lock == 0) &&
+        if (d->write_locks == 0 &&
+                (!filp_writable || d->read_locks == 0) &&
                 d->ticket_tail == d->ticket_head)
         {
 
             if (filp_writable)
-                d->write_lock++;
+                d->write_locks++;
             else
-                d->read_lock++;
+                d->read_locks++;
 
             filp->f_flags |= F_OSPRD_LOCKED;
 
@@ -412,9 +393,9 @@ int osprd_ioctl(struct inode *inode, struct file *filp,
         else
         {
             if (filp_writable)
-                d->write_lock--;
+                d->write_locks--;
             else
-                d->read_lock--;
+                d->read_locks--;
 
             wake_up_all(&d->blockq);
             filp->f_flags &= !F_OSPRD_LOCKED;
