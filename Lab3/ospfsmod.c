@@ -1558,10 +1558,13 @@ ospfs_symlink(struct inode *dir, struct dentry *dentry, const char *symname)
 	//look for empty inode
 	while(entry_ino < ospfs_super->os_ninodes)
 	{
+		new_ino = ospfs_inode(entry_ino);
+
 		if(new_ino && new_ino->oi_nlink == 0)
 		{
 			break;
 		}
+		
 		entry_ino++;
 	}
 
@@ -1631,10 +1634,12 @@ ospfs_follow_link(struct dentry *dentry, struct nameidata *nd)
 		if(current->uid == 0)
 		{
 			nd_set_link(nd, oi->oi_symlink + 5);
+			//eprintk("file name is %s\n", oi->oi_symlink + 5);	
 		}
 		else
 		{
 			nd_set_link(nd,oi->oi_symlink + i + 1);
+			//eprintk("file name is %s\n", oi->oi_symlink + i + 1);	
 			return (void *) 0;
 		}
 	}
