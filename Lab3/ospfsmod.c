@@ -1021,7 +1021,7 @@ change_size(ospfs_inode_t *oi, uint32_t new_size)
 		else
 			return -EIO;
 	}
-	while (ospfs_size2nblocks(old_size) > ospfs_size2nblocks(new_size)) {
+	while (ospfs_size2nblocks(oi->oi_size) > ospfs_size2nblocks(new_size)) {
 	        /* COMPLETED: EXERCISE: Your code here */
 		if(remove_block(oi) != 0)
 			return -EIO; 
