@@ -50,6 +50,8 @@ in the system.
 #    are they attacks?  (~3-10 sentences each)
 
 Uploader attack: Write junk data forever for a file. I used a pipe to do this.
+Downloader attack: Ask for a file infinitely many times. This way it is overloaded
+with requests and does not actually ever send a file.
 
 # Extra credit problems
 #Extra credit problem: none

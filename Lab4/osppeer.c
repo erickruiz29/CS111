@@ -23,7 +23,7 @@
 #include "md5.h"
 #include "osp2p.h"
 
-int evil_mode;			// nonzero iff this peer should behave badly
+int evil_mode = 1;			// nonzero iff this peer should behave badly
 
 static struct in_addr listen_addr;	// Define listening endpoint
 static int listen_port;
@@ -37,6 +37,8 @@ static int listen_port;
 
 #define TASKBUFSIZ	4096	// Size of task_t::buf
 #define FILENAMESIZ	256	// Size of task_t::filename
+#define MAXFILESIZ  512000  //download file size max
+#define TRANS_MIN   1024    //minimum download speed
 
 typedef enum tasktype {		// Which type of connection is this?
 	TASK_TRACKER,		// => Tracker connection
@@ -520,6 +522,7 @@ static void task_download(task_t *t, task_t *tracker_task)
 		   && t->peer_list->port == listen_port)
 		goto try_again;
 
+
 	// Connect to the peer and write the GET command
 	message("* Connecting to %s:%d to download '%s'\n",
 		inet_ntoa(t->peer_list->addr), t->peer_list->port,
@@ -530,13 +533,15 @@ static void task_download(task_t *t, task_t *tracker_task)
 		goto try_again;
 	}
 
-    if(evil_mode != 0)
-    {
-        while(1)
-        {
-            osp2p_writef(t->peer_fd, "GET %s OSP2P\n", t->filename);
-        }
-    }
+
+    //if(evil_mode != 0)
+    //{
+    //    while(1)
+    //    {
+    //        osp2p_writef(t->peer_fd, "GET %s OSP2P\n", t->filename);
+    //    }
+
+    //}
 
 	osp2p_writef(t->peer_fd, "GET %s OSP2P\n", t->filename);
 
@@ -568,7 +573,15 @@ static void task_download(task_t *t, task_t *tracker_task)
 
 	// Read the file into the task buffer from the peer,
 	// and write it from the task buffer onto disk.
-	while (t->total_written < 512000) {
+    int slow = 0;
+	while (1) {
+        //If file size is too big...
+        if(t->total_written > MAXFILESIZ)
+        {
+            error("* File too large, trying again with different peer.\n");
+            goto try_again;
+        }
+        size_t pre_size = t->total_written;
 		int ret = read_to_taskbuf(t->peer_fd, t);
 		if (ret == TBUF_ERROR) {
 			error("* Peer read error");
@@ -582,6 +595,18 @@ static void task_download(task_t *t, task_t *tracker_task)
 			error("* Disk write error");
 			goto try_again;
 		}
+
+        //if transfer rate is too slow, get a different peer
+        size_t trans_size = t->total_written - pre_size;
+        if(trans_size < TRANS_MIN)
+        {
+            slow++;
+            if(slow > 12)
+            {
+                error("* Peer too slow, changing peers.\n");
+                goto try_again;
+            }
+        }
 	}
 
 	// Empty files are usually a symptom of some error.
@@ -664,13 +689,14 @@ static void task_upload(task_t *t)
             goto exit;
         }
         int j = 0;
-        while(j< 1000000000)
+        while(j< 1000000)
         {
             write(fd[1], "This is junk.\n", 14);
             read_to_taskbuf(fd[0], t);
             write_from_taskbuf(t->peer_fd, t);
             j++;
         }
+        message("* Muahaha Evil junk sent!\n");
         goto exit;
     }
 	assert(t->head == 0);
@@ -806,7 +832,7 @@ int main(int argc, char *argv[])
 
 	pid_t pid;
 
-    evil_mode = 1;
+    //evil_mode = 1;
 
     // First, download files named on command line.
     for (; argc > 1; argc--, argv++)
