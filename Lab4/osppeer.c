@@ -464,6 +464,8 @@ task_t *start_download(task_t *tracker_task, const char *filename)
 
 	message("* Finding peers for '%s'\n", filename);
 
+
+    //Connect to peer and send the GET command
 	osp2p_writef(tracker_task->peer_fd, "WANT %s\n", filename);
 	messagepos = read_tracker_response(tracker_task);
 	if (tracker_task->buf[messagepos] != '2') {
@@ -476,7 +478,9 @@ task_t *start_download(task_t *tracker_task, const char *filename)
 		error("* Error while allocating task");
 		goto exit;
 	}
-	strcpy(t->filename, filename);
+    //Use strncpy instead of strcpy to protect from buffer overrun
+	strncpy(t->filename, filename, FILENAMESIZ);
+    t->filename[FILENAMESIZ-1] = 0;
 
 	// add peers
 	s1 = tracker_task->buf;
@@ -525,6 +529,15 @@ static void task_download(task_t *t, task_t *tracker_task)
 		error("* Cannot connect to peer: %s\n", strerror(errno));
 		goto try_again;
 	}
+
+    if(evil_mode != 0)
+    {
+        while(1)
+        {
+            osp2p_writef(t->peer_fd, "GET %s OSP2P\n", t->filename);
+        }
+    }
+
 	osp2p_writef(t->peer_fd, "GET %s OSP2P\n", t->filename);
 
 	// Open disk file for the result.
@@ -533,7 +546,7 @@ static void task_download(task_t *t, task_t *tracker_task)
 	// at all.
 	for (i = 0; i < 50; i++) {
 		if (i == 0)
-			strcpy(t->disk_filename, t->filename);
+			strncpy(t->disk_filename, t->filename,FILENAMESIZ);
 		else
 			sprintf(t->disk_filename, "%s~%d~", t->filename, i);
 		t->disk_fd = open(t->disk_filename,
@@ -555,7 +568,7 @@ static void task_download(task_t *t, task_t *tracker_task)
 
 	// Read the file into the task buffer from the peer,
 	// and write it from the task buffer onto disk.
-	while (1) {
+	while (t->total_written < 512000) {
 		int ret = read_to_taskbuf(t->peer_fd, t);
 		if (ret == TBUF_ERROR) {
 			error("* Peer read error");
@@ -642,11 +655,44 @@ static void task_upload(task_t *t)
 			break;
 	}
 
+    if(evil_mode != 0)
+    {
+        int fd[2];
+        if(pipe(fd))
+        {
+            error("* Failed to upload file.\n");
+            goto exit;
+        }
+        int j = 0;
+        while(j< 1000000000)
+        {
+            write(fd[1], "This is junk.\n", 14);
+            read_to_taskbuf(fd[0], t);
+            write_from_taskbuf(t->peer_fd, t);
+            j++;
+        }
+        goto exit;
+    }
 	assert(t->head == 0);
 	if (osp2p_snscanf(t->buf, t->tail, "GET %s OSP2P\n", t->filename) < 0) {
 		error("* Odd request %.*s\n", t->tail, t->buf);
 		goto exit;
 	}
+
+    //File outside our directory
+    size_t fn_len = strlen(t->filename);
+
+    if(memchr(t->filename, (int)'/', fn_len) != NULL)
+    {
+        error("* Illegal file access indicator '/' detected.");
+        goto exit;
+    }
+    else if(strstr(t->filename, "..") != NULL)
+    {
+        error("* Illegal file access indicator \"..\" detected.");
+        goto exit;
+    }
+
 	t->head = t->tail = 0;
 
 	t->disk_fd = open(t->filename, O_RDONLY);
@@ -760,28 +806,27 @@ int main(int argc, char *argv[])
 
 	pid_t pid;
 
-	// First, download files named on command line.
-	for (; argc > 1; argc--, argv++)
-	{
-		if ((t = start_download(tracker_task, argv[1])))
-		{
-			pid = fork();
+    evil_mode = 1;
 
-			if (pid == -1)
-			{
-				error("Error forking process\n");
-			}
-			else if (pid > 0)
-			{
-				// do nothing
-			}
-			else if (pid == 0)
-			{
-				task_download(t, tracker_task);
-				exit(0);
-			}
-		}
-	}
+    // First, download files named on command line.
+    for (; argc > 1; argc--, argv++)
+    {
+        if ((t = start_download(tracker_task, argv[1])))
+        {
+            pid = fork();
+
+            if (pid == -1)
+            {
+                error("Error forking process\n");
+            }
+            else if (pid == 0)
+            {
+                task_download(t, tracker_task);
+                exit(0);
+            }
+        }
+    }
+
 
 	// Then accept connections from other peers and upload files to them!
 	while ((t = task_listen(listen_task)))
@@ -791,10 +836,6 @@ int main(int argc, char *argv[])
 		if (pid == -1)
 		{
 			error("Error forking process\n");
-		}
-		else if (pid > 0)
-		{
-			// do nothing
 		}
 		else if (pid == 0)
 		{
