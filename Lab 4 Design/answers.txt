@@ -1,0 +1,62 @@
+# Fill in your name, student ID, and email address in this file.
+# If you are working in a team, fill out the information for both team
+# members.
+
+# SUBMIT THE LAB ONLY ONCE (from only one partner). This file will be
+# automatically parsed in order to give both team members credit for the
+# lab.
+
+# You need to fill in the EXERCISE sections describing your solutions
+# for Tasks 1, 2, and 3, as well as write the corresponding code.
+# If you did one or more extra credit problems, indicate which one in the
+# appropriate section below (remove the # sign first). If you have any other
+# information you'd like us to know, please add it at the end of the file.
+
+# Partner 1
+Name: Erick Ruiz
+Student ID: 303913013
+Email: erickruiz29@gmail.com
+
+# Partner 2 (if you're working in a team)
+Name: Earl Escueta
+Student ID: 244024077
+Email: earl909@yahoo.com
+
+# EXERCISE 1: What method you used to make your peer download and upload
+#    files in parallel?  (~1-3 sentences)
+
+We used forking to run downloads and uploads in parallel. Using threads would
+make this step a lot more complex than it needed to be. Using events would
+have been good, but too much for this project.
+
+# EXERCISE 2A: What conditions did you find and fix that would have
+#    triggered a buffer overrun bug?  (~1-3 sentences each)
+
+Whenever strcpy was used, I would replace it with strncpy to limit how much
+is actually copied over.
+i.e. in start_download, t->filename using, FILENAMESIZ as the limit.
+
+# EXERCISE 2B: What other robustness problems did you fix?  (~1-3 sentences
+#    each)
+I created a maximum download size (512000 bytes, arbritary). This is to prevent
+from downloading infinite sized files to fill up disk space. If bigger sized
+files are to be downloaded, this would need to be changed or only part of the file
+would be downloaded.
+
+I made it so only files in the current directory could be uploaded. This protects files
+in the system.
+
+The size of the buffer is increase so that so the program is able to run with a tracker
+that has a lot of peers/
+
+# EXERCISE 3: Describe the attacks you implemented for "evil mode".  Why
+#    are they attacks?  (~3-10 sentences each)
+
+Uploader attack: Write junk data forever for a file. I used a pipe to do this.
+Downloader attack: Ask for a file infinitely many times. This way it is overloaded
+with requests and does not actually ever send a file.
+
+# Extra credit problems
+#Extra credit problem: none
+
+# Add any other information you'd like us to know below this line.
